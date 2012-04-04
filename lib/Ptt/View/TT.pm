@@ -1,0 +1,39 @@
+package Ptt::View::TT;
+
+use strict;
+use warnings;
+
+use base 'Catalyst::View::TT';
+
+__PACKAGE__->config(
+    TEMPLATE_EXTENSION => '.tt',
+    CATALYST_VAR => 'c',
+    TIMER        => 0,
+    ENCODING     => 'utf-8',
+    render_die => 1, # Default for new apps, see render method docs
+);
+
+=head1 NAME
+
+Ptt::View::TT - TT View for Ptt
+
+=head1 DESCRIPTION
+
+TT View for Ptt.
+
+=head1 SEE ALSO
+
+L<Ptt>
+
+=head1 AUTHOR
+
+mamaya,,,
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
+1;
