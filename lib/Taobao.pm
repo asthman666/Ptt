@@ -4,6 +4,8 @@ use warnings;
 use URI::Escape;
 use Digest::MD5 qw(md5_hex);
 use POSIX;
+use LWP::UserAgent;
+use JSON;
 
 sub new {
     my $class = shift;
@@ -13,7 +15,13 @@ sub new {
 	@_
     };
     bless $self, $class;
+    $self->init;
     return $self;
+}
+
+sub init {
+    my $self = shift;
+    $self->{ua} = LWP::UserAgent->new();
 }
 
 sub sign {
@@ -50,6 +58,26 @@ sub url {
     }
     my $url = "http://gw.api.taobao.com/router/rest?" . join("&", @p);
     return $url;
+}
+
+sub before_get {
+    my $self = shift;
+    my $api_params = shift;
+
+    my $url = $self->url($api_params);
+    my $res = $self->{ua}->get($url);
+    my $content = $res->content;
+    my $ref = decode_json $content;
+    return $ref;
+}
+
+sub finalize {
+    my $self = shift;
+    my $results = shift;
+    
+    foreach ( @$results ) {
+	$_->{pic_url} =~ s{\.jpg$}{.jpg_b.jpg};
+    }
 }
 
 1;
