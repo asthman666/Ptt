@@ -1,0 +1,11 @@
+<html>
+<head>
+	<title>Putaotao.com</title>	
+</head>
+<body>
+	<form action="/search">
+		<input name=q>
+		<input type=submit value="Go">
+	</form>
+</body>	
+</html>
