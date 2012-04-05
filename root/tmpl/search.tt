@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title></title>	
+</head>
+<body>
+	<table>
+	    <tr>		
+	        [% index = 0 %]
+		[% FOREACH row IN results %]
+		   <td>
+			<table>
+				<tr><td align=center>
+				    <a href="[% row.click_url %]"><img src="[% row.pic_url %]"></a>
+				</td></tr>
+				<tr><td align=center>[% row.title %]</td></tr>
+				<tr><td align=center>[% row.nick %]</td></tr>
+				<tr><td align=center>[% row.price %] ([% row.commission %])</td></tr>
+				<tr><td align=center>[% row.num_iid %]</td></tr>
+			</table>
+		   </td>
+		   [% index = index + 1 %]
+		   [% IF index == 4; index = 0; %]
+		      </tr><tr>
+		   [% END %]
+		[% END %]				
+	    </tr>
+	</table>
+</body>
+</html>
