@@ -60,7 +60,7 @@ sub url {
     return $url;
 }
 
-sub before_get {
+sub ref {
     my $self = shift;
     my $api_params = shift;
 

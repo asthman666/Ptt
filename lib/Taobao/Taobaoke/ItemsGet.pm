@@ -22,7 +22,7 @@ sub get {
 	keyword   => uri_escape_utf8($q),
     };
     
-    my $ref = $self->before_get($api_params);
+    my $ref = $self->ref($api_params);
 
     my $results       = $ref->{taobaoke_items_get_response}->{taobaoke_items}->{taobaoke_item};
     my $total_results = $ref->{taobaoke_items_get_response}->{total_results};

@@ -20,7 +20,7 @@ sub get {
 	num_iids  => $num_iids,
     };
     
-    my $ref = $self->before_get($api_params);
+    my $ref = $self->ref($api_params);
 
     my $results       = $ref->{taobaoke_items_convert_response}->{taobaoke_items}->{taobaoke_item};
     my $total_results = $ref->{taobaoke_items_convert_response}->{total_results};
