@@ -1,11 +1,68 @@
 <html>
 <head>
-	<title>Putaotao.com</title>	
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>葡萄淘</title>
+<style>
+body {
+	height:600px;
+}
+#container {
+	margin-top: 100px;
+}
+p {
+	font-size:80px;
+	letter-spacing:-2px;
+}
+.actextbox {
+    border-color: #CCCCCC #999999 #999999 #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 1.5em;
+    width: 400px;
+    height: 30px;
+}
+.pu {
+    color: red;
+}
+.tao1 {
+	color: green;
+}
+.tao2 {
+	color: blue;
+}
+.lsb {
+    border: thin solid;
+    cursor: pointer;
+    font: 15px arial,sans-serif;
+	font-weight:bold;
+    height: 30px;
+    margin: 0;
+    outline: 0 none;
+    vertical-align: top;
+}
+</style>
+
 </head>
+      
 <body>
-	<form action="/search">
-		<input name=q>
-		<input type=submit value="Go">
-	</form>
-</body>	
+	<div id="container">
+		<table cellspacing="0" cellpadding="4" border="0" align="center">
+			<tr>
+				<td align="center">
+					<p><span class="pu">P</span><span class="tao1">T</span><span class="tao2">T</span></p>
+				</td>
+			</tr>
+			<tr>
+				<form method="get" action="/search">			
+				<td>
+					<input class="actextbox" type="text" autocomplete="off" maxlength="300" name="q">
+				</td>
+				<td>
+					<input class="lsb" type="submit" value="Go">
+				</td>
+				</form>
+			</tr>
+		</table>
+	</div>
+</body>
 </html>
