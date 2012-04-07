@@ -38,7 +38,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	    'q' => $q,
 	    'p' => $p,
 	    'page_size' => $c->config->{page_size},
-	    'fields' => join(",", qw(num_iid title nick pic_url cid price delist_time post_fee score volume)),
+	    'fields' => join(",", qw(num_iid title nick pic_url cid price delist_time post_fee score volume detail_url)),
 	    );
 	
 	my $tmp_results;

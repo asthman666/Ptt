@@ -25,11 +25,7 @@
 		[% END %]
             </td>
             <td width=15%>
-	        [% IF row.commission %]
-     	            <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物"></a>
-		[% ELSE %]
-     	            <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物"></a>		
-		[% END %]
+	        <a href="[% row.click_url || row.detail_url %]" target=_blank><input type="button" class="click_url" value="去购物"></a>		
             </td>
         </tr>
     [% END %]
