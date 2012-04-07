@@ -13,12 +13,14 @@ sub new {
 sub get {
     my $self = shift;
     my $q = shift;
+    my $p = shift;
 
     my $api_params = {
 	fields    => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate',
 	method    => 'taobao.taobaoke.items.get',
 	nick      => $self->{nick},
 	page_size => $self->{page_size},
+	page_no   => $p,
 	keyword   => uri_escape_utf8($q),
     };
     

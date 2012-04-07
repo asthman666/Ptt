@@ -5,7 +5,7 @@
             <td width=10%><img src="[% row.pic_url %]"></td>
 	    <td width=35%>
 	        <table>
-		    <tr><td><a href="[% row.click_url %]">[% row.title %]</a></td></tr>
+		    <tr><td><a target=_blank href="[% row.click_url %]">[% row.title %]</a></td></tr>
 		    [% IF row.volume %]<tr><td>最近成交<span class="volume">[% row.volume %]</span>笔</td></tr>[% END %]
 		    <tr><td>[% row.nick %] [% IF row.seller_credit_score %]<img src="/static/images/s[% row.seller_credit_score %].gif">[% END %]</td></tr>
 		</table>
@@ -27,4 +27,24 @@
             </td>
         </tr>
     [% END %]
+</table>
+
+<table cellspacing="0" cellpadding="5" border="0" align="center" class="page">
+       <tr><td>
+           [% IF page.data_page.previous_page %]
+	       [% params.p = page.data_page.previous_page %]
+       	       <a href="[% c.req.uri_with({ p => page.data_page.previous_page }) %]">上一页</a>
+           [% END %]
+	   [% FOREACH page_num IN page.before_page_list %]
+               <a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a>
+	   [% END %]
+           [% page.data_page.current_page %]
+           [% FOREACH page_num IN page.after_page_list %]
+               <a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a>
+           [% END %]
+           [% IF page.more %]...[% END %]
+           [% IF page.data_page.next_page %]
+               <a href="[% c.req.uri_with({ p => page.data_page.next_page }) %]">下一页</a>
+           [% END %]
+       </td></tr>
 </table>
