@@ -7,7 +7,7 @@
 	        <table>
 		    <tr><td><a target=_blank href="[% row.click_url %]">[% row.title %]</a></td></tr>
 		    [% IF row.volume %]<tr><td>最近成交<span class="volume">[% row.volume %]</span>笔</td></tr>[% END %]
-		    <tr><td>[% row.nick %] [% IF row.seller_credit_score %]<img src="/static/images/s[% row.seller_credit_score %].gif">[% END %]</td></tr>
+		    <tr><td>[% row.nick %] [% IF row.score %]<img src="/static/images/s[% row.score %].gif">[% END %]</td></tr>
 		</table>
             </td>
             <td width=15%>
@@ -16,19 +16,30 @@
 		    <tr><td>[% row.item_location %]</td></tr>
 		</table>
             </td>
-            <td>
+            <td width=25%>
+	        [% IF row.commission_rate %]
 	        <table>
 		    <tr><td><span class="commission_rate">返利 [% row.commission_rate %]</span></td></tr>
 		    <tr><td>可省￥[% row.commission %]</td></tr>
 		</table>
+		[% END %]
             </td>
-            <td>
-	        <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物,拿返利"></a>
+            <td width=15%>
+	        [% IF row.commission %]
+     	            <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物"></a>
+		[% ELSE %]
+     	            <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物"></a>		
+		[% END %]
             </td>
         </tr>
     [% END %]
 </table>
 
+[% IF page.data_page.first_page != page.data_page.last_page %]
+   [% INCLUDE page %]
+[% END %]
+
+[% BLOCK page %]
 <table cellspacing="0" cellpadding="5" border="0" align="center" class="page">
        <tr><td>
            [% IF page.data_page.previous_page %]
@@ -48,3 +59,4 @@
            [% END %]
        </td></tr>
 </table>
+[% END %]

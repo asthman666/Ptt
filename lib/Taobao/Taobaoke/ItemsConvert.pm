@@ -11,12 +11,16 @@ sub new {
 
 sub get {
     my $self = shift;
-    my $num_iids = shift;
+    my %conf = @_;
+
+    my $num_iids = $conf{num_iids};
+    my $nick     = $conf{nick};
+    my $fields   = $conf{fields} || 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate';
 
     my $api_params = {
-	fields    => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate',
+	fields    => $fields,
 	method    => 'taobao.taobaoke.items.convert',
-	nick      => $self->{nick},
+	nick      => $nick,
 	num_iids  => $num_iids,
     };
     
