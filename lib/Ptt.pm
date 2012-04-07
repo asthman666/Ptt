@@ -46,6 +46,7 @@ __PACKAGE__->config(
 	    __PACKAGE__->path_to( 'root', 'tmpl' ),
 	    __PACKAGE__->path_to( 'root', 'lib' ),
             ],	
+	WRAPPER => 'site/wrapper',	    
     },
     default_view => 'TT',
 

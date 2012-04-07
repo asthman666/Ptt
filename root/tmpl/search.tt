@@ -1,29 +1,30 @@
-<html>
-<head>
-	<title></title>	
-</head>
-<body>
-	<table>
-	    <tr>		
-	        [% index = 0 %]
-		[% FOREACH row IN results %]
-		   <td>
-			<table>
-				<tr><td align=center>
-				    <a href="[% row.click_url %]"><img src="[% row.pic_url %]"></a>
-				</td></tr>
-				<tr><td align=center>[% row.title %]</td></tr>
-				<tr><td align=center>[% row.nick %]</td></tr>
-				<tr><td align=center>[% row.price %] ([% row.commission %])</td></tr>
-				<tr><td align=center>[% row.num_iid %]</td></tr>
-			</table>
-		   </td>
-		   [% index = index + 1 %]
-		   [% IF index == 4; index = 0; %]
-		      </tr><tr>
-		   [% END %]
-		[% END %]				
-	    </tr>
-	</table>
-</body>
-</html>
+<table cellspacing="0" cellpadding="5" border="0" align="center" class="search-list">
+    [% index = 0 %]
+    [% FOREACH row IN results %]
+        <tr class="s-tr">
+            <td width=10%><img src="[% row.pic_url %]"></td>
+	    <td width=35%>
+	        <table>
+		    <tr><td><a href="[% row.click_url %]">[% row.title %]</a></td></tr>
+		    [% IF row.volume %]<tr><td>最近成交<span class="volume">[% row.volume %]</span>笔</td></tr>[% END %]
+		    <tr><td>[% row.nick %] [% IF row.seller_credit_score %]<img src="/static/images/s[% row.seller_credit_score %].gif">[% END %]</td></tr>
+		</table>
+            </td>
+            <td width=15%>
+	        <table>
+		    <tr><td>￥<span class="price">[% row.price %]</span></td></tr>
+		    <tr><td>[% row.item_location %]</td></tr>
+		</table>
+            </td>
+            <td>
+	        <table>
+		    <tr><td><span class="commission_rate">返利 [% row.commission_rate %]</span></td></tr>
+		    <tr><td>可省￥[% row.commission %]</td></tr>
+		</table>
+            </td>
+            <td>
+	        <a href="[% row.click_url %]" target=_blank><input type="button" class="click_url" value="去购物,拿返利"></a>
+            </td>
+        </tr>
+    [% END %]
+</table>

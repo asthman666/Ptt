@@ -76,7 +76,8 @@ sub finalize {
     my $results = shift;
     
     foreach ( @$results ) {
-	$_->{pic_url} =~ s{\.jpg$}{.jpg_b.jpg};
+	$_->{pic_url} =~ s{\.jpg$}{.jpg_sum.jpg};
+	$_->{commission_rate} = sprintf("%.2f", $_->{commission_rate}/100) . "%";
     }
 }
 

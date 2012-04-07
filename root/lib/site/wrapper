@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/static/js/search_list.js"></script>
+<link rel="stylesheet" 
+      href="/static/css/tag.css"
+      type="text/css" />    
+</head>
+<body>
+
+<!-- begine header -->
+<table cellspacing="0" cellpadding="4" border="0" align="center">
+	<tr>
+		<form method="get" action="/search">			
+		<td>
+			<input class="actextbox" type="text" autocomplete="off" maxlength="300" name="q" value="[% c.req.params.q %]">
+		</td>
+		<td>
+			<input class="lsb" type="submit" value="Go">
+		</td>
+		</form>
+	</tr>
+</table>
+<!-- end header -->
+
+[% content %]
+
+<!-- begine footer -->
+
+<!-- end footer -->
+</body>
+</head>
+</html>
