@@ -15,6 +15,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 
     my $q = $c->req->params->{q};
     my $p = $c->req->params->{p} || 1;  # page
+    my $cid = $c->req->params->{cid};
 
     my ($results, $total_results, $facet);
 
@@ -39,8 +40,12 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	    'p' => $p,
 	    'page_size' => $c->config->{page_size},
 	    'fields' => join(",", qw(num_iid title nick pic_url cid price delist_time post_fee score volume detail_url)),
+	    'cid' => $cid,
 	    );
 	
+	
+	$self->facet($c, $facet);
+
 	my $tmp_results;
 	my @num_iids;
 	foreach ( @$results ) {
@@ -67,6 +72,31 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     $page->paging;
 
     $c->stash(results => $results, total_results => $total_results, template => 'search.tt', page => $page, facet => $facet);
+}
+
+sub facet {
+    my ( $self, $c, $facet ) = @_;
+    return unless $facet;
+
+    my @cids = map {$_->{category_id}} @$facet;
+
+    my $rs = $c->model('PttDB::Cid')->search({cid => {-in => \@cids}});
+
+    my %cid_name_map;
+    while ( my $cc = $rs->next ) {
+	$cid_name_map{$cc->cid} = $cc->name;	
+    }
+
+    for ( my $i = @$facet - 1; $i >= 0; $i-- ) {
+	if ( $cid_name_map{$facet->[$i]->{category_id}} ) {
+	    $facet->[$i]->{name} = $cid_name_map{$facet->[$i]->{category_id}};
+	} else {
+	    # add note: need to check the category_id if in our cid table
+	    splice(@$facet, $i, 1);
+	}
+    }
+
+    @$facet = sort {$b->{count} <=> $a->{count}} @$facet;
 }
 
 __PACKAGE__->meta->make_immutable;

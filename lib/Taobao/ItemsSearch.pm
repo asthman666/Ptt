@@ -17,6 +17,7 @@ sub get {
     my $q = $conf{q};
     my $p = $conf{p};
     my $fields = $conf{fields};
+    my $cid = $conf{cid};
     my $page_size = $conf{page_size};
     my $sort = $conf{sort} || "popularity:desc";
 
@@ -28,6 +29,8 @@ sub get {
 	'q'       => uri_escape_utf8($q),
 	order_by  => $sort,
     };
+
+    $api_params->{cid} = $cid if $cid;
     
     my $ref = $self->ref($api_params);
 

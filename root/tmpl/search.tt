@@ -1,3 +1,17 @@
+<div class="facet">
+    <ul class="facet-ul">
+        [% FOREACH f IN facet %]
+	    <li class="facet-li"><a href="[% c.req.uri_with({cid => f.category_id}) %]">[% f.name %]</a></li>
+	[% END %]
+    </ul>	
+    <div class="facet-clear"></div>
+    <div class="showmore">
+        <a href="#"><span>显示全部品牌</span></a>
+    </div>
+
+</div>
+
+
 <table cellspacing="0" cellpadding="5" border="0" align="center" class="search-list">
     [% index = 0 %]
     [% FOREACH row IN results %]
