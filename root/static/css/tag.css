@@ -107,3 +107,27 @@ a {
     color: #2A9AD2;
     text-decoration: none;
 }
+
+#tbbc {
+    position: relative;
+    left:50%;
+    margin-left: -500px;
+    width: 988px;
+    margin-bottom: 10px;
+    background:#ebeff9;
+    padding-left:12px;
+    padding-top:12px;
+    padding-bottom:12px;
+}
+
+#tbbc .std {
+    font-size: 150%;
+    font-weight: bold;
+}
+
+#tbbc .close_btn {
+    float: right;
+    height: 14px;
+    width: 14px;
+    margin-right: 5px;
+}

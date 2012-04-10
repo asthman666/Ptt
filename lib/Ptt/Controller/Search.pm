@@ -17,7 +17,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my $p = $c->req->params->{p} || 1;  # page
     my $cid = $c->req->params->{cid};
 
-    my ($results, $total_results, $facet);
+    my ($results, $total_results, $facet, %cd_cid);
 
     my $tk_items_convert = Taobao::Taobaoke::ItemsConvert->new(
 	app_key    => $c->config->{app_key},
@@ -35,6 +35,8 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	    secret_key => $c->config->{secret_key},
 	    );
 
+	$c->log->debug("items search begin");
+
 	($results, $total_results, $facet) = $items_search->get(
 	    'q' => $q,
 	    'p' => $p,
@@ -43,8 +45,14 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	    'cid' => $cid,
 	    );
 	
-	
+	$c->log->debug("items search done");
+
 	$self->facet($c, $facet);
+
+	if ( $cid ) {
+	    %cd_cid = $c->model("PttDB::Cid")->find($cid)->get_columns;
+	    $cd_cid{rlink} = $c->req->uri_with({ cid => undef });
+	}
 
 	my $tmp_results;
 	my @num_iids;
@@ -71,7 +79,12 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my $page = Page->new(data_page => $data_page);
     $page->paging;
 
-    $c->stash(results => $results, total_results => $total_results, template => 'search.tt', page => $page, facet => $facet);
+    $c->stash(results => $results, 
+	      total_results => $total_results, 
+	      cd_cid => \%cd_cid,
+	      template => 'search.tt', 
+	      page => $page, 
+	      facet => $facet);
 }
 
 sub facet {
@@ -90,6 +103,9 @@ sub facet {
     for ( my $i = @$facet - 1; $i >= 0; $i-- ) {
 	if ( $cid_name_map{$facet->[$i]->{category_id}} ) {
 	    $facet->[$i]->{name} = $cid_name_map{$facet->[$i]->{category_id}};
+	    if ( $c->req->params->{cid} && $c->req->params->{cid} == $facet->[$i]->{category_id} ) {
+		splice(@$facet, $i, 1);
+	    }
 	} else {
 	    # add note: need to check the category_id if in our cid table
 	    splice(@$facet, $i, 1);
