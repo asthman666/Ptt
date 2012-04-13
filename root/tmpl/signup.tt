@@ -1,0 +1,6 @@
+<form action="[% c.uri_for(c.controller('User').action_for('signup')) %]" method="post">
+用户名: <input name="user_name" value=""><br>
+邮箱: <input name="email" value=""><br>
+密码: <input type="password" name="password" value="">
+<input type="submit" value="注册">
+</form>

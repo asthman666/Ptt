@@ -17,10 +17,15 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use Catalyst qw/
-    -Debug
     ConfigLoader
     Static::Simple
     Unicode::Encoding
+
+    Authentication
+
+    Session
+    Session::State::Cookie
+    Session::Store::FastMmap
 /;
 
 extends 'Catalyst';
@@ -40,6 +45,21 @@ __PACKAGE__->config(
     name => 'Ptt',
 
     encoding => 'UTF-8',
+
+    'Plugin::Authentication' => {
+	default_realm => 'members',
+	members => {
+	    credential => {
+		class => 'Password',
+		password_type => 'hashed',
+		password_hash_type => 'MD5',
+	    },
+	    store => {
+		class => 'DBIx::Class',
+		user_model => 'PttDB::User',
+	    }
+	},	
+    },
 
     'View::TT' => {
 	INCLUDE_PATH => [
