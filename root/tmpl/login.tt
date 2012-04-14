@@ -1,5 +1,23 @@
-<form action="[% c.uri_for(c.controller('User').action_for('login')) %]" method="post">
-邮箱: <input name="email" value=""><br>
-密码: <input type="password" name="password" value="">
-<input type="submit" value="登陆">
+<div class="row">
+<span class="span5 offset3">
+<form action="[% c.uri_for(c.controller('User').action_for('login')) %]" method="post" class="form-horizontal">
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="input01">邮箱:</label>
+        <div class="controls">
+          <input type="text" class="input-large" id="email" name="email">
+        </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="input01">密码:</label>
+        <div class="controls">
+          <input type="password" class="input-large" id="password" name="password">
+        </div>
+    </div>
+    <div class="form-actions" style="background:white;border-top:none;">
+      <button type="submit" class="btn btn-primary">登陆</button>
+    </div>
+  </fieldset>
 </form>
+</span>
+</div>
