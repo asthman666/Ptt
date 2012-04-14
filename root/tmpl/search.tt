@@ -1,3 +1,4 @@
+<!--
 [% IF facet.size %]
 <div class="facet">
     <ul class="facet-ul">
@@ -18,11 +19,13 @@
      <span class="std">[% cd_cid.name %]</span>
 </div>
 [% END %]
+-->
 
-<table cellspacing="0" cellpadding="5" border="0" align="center" class="search-list">
+<table class="table">
+    <tbody>
     [% index = 0 %]
     [% FOREACH row IN results %]
-        <tr class="s-tr">
+        <tr>
             <td width=10%><img src="[% row.pic_url %]"></td>
 	    <td width=35%>
 	        <table>
@@ -50,6 +53,7 @@
             </td>
         </tr>
     [% END %]
+    </tbody>
 </table>
 
 [% IF page.data_page.first_page != page.data_page.last_page %]
@@ -57,23 +61,31 @@
 [% END %]
 
 [% BLOCK page %]
-<table cellspacing="0" cellpadding="5" border="0" align="center" class="page">
-       <tr><td>
-           [% IF page.data_page.previous_page %]
-	       [% params.p = page.data_page.previous_page %]
-       	       <a href="[% c.req.uri_with({ p => page.data_page.previous_page }) %]">上一页</a>
-           [% END %]
-	   [% FOREACH page_num IN page.before_page_list %]
-               <a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a>
-	   [% END %]
-           [% page.data_page.current_page %]
-           [% FOREACH page_num IN page.after_page_list %]
-               <a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a>
-           [% END %]
-           [% IF page.more %]...[% END %]
-           [% IF page.data_page.next_page %]
-               <a href="[% c.req.uri_with({ p => page.data_page.next_page }) %]">下一页</a>
-           [% END %]
-       </td></tr>
-</table>
+<div class="row">
+<span class="span10 offset4">
+<div class="pagination">
+  <ul>
+    [% IF page.data_page.previous_page %]
+      [% params.p = page.data_page.previous_page %]
+      <li><a href="[% c.req.uri_with({ p => page.data_page.previous_page }) %]">上一页</a></li>
+    [% END %]
+
+
+    [% FOREACH page_num IN page.before_page_list %]
+      <li><a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a></li>
+    [% END %]
+
+    <li class="active"><a href="#">[% page.data_page.current_page %]</a></li>
+
+    [% FOREACH page_num IN page.after_page_list %]
+      <li><a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a></li>
+    [% END %]
+
+    [% IF page.data_page.next_page %]
+      <li class="next"><a href="[% c.req.uri_with({ p => page.data_page.next_page }) %]">下一页</a></li>
+    [% END %]
+  </ul>
+</div>
+</span>
+</div>
 [% END %]
