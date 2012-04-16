@@ -1,0 +1,13 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <div class="nav-collapse">
+         <ul class="nav">
+           <li class="active">
+	     <a href="/profile/book">图书</a>
+	   </li>
+	 </ul>
+      </div>
+    </div>
+  </div>
+</div>

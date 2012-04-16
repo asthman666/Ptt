@@ -20,6 +20,9 @@
           <input type="password" class="input-large" id="password" name="password">
         </div>
     </div>
+    <div class="form-actions" style="background:white;border-top:none;">
+      <button type="submit" class="btn btn-primary">注册</button>
+    </div>
   </fieldset>
 </form>
 </span>

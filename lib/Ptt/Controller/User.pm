@@ -10,13 +10,15 @@ sub login : Chained("/") : PathPart : Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash(template => "login.tt");
-    return unless $c->request->body_params;
+    return unless keys %{$c->request->body_params};
 
     my ( $email, $password ) = ($c->req->params->{email}, $c->req->params->{password});
 
     if ( $c->authenticate( { email => $email,
                              password  => $password } ) ) {
-	$c->log->debug("ok authenticate success");
+	$c->res->redirect($c->uri_for($c->controller("Profile")->action_for("profile")));
+	$c->detach;
+	return;
     }
 }
 
@@ -24,7 +26,7 @@ sub signup : Chained("/") : PathPart : Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash(template => "signup.tt");
-    return unless $c->request->body_params;
+    return unless keys %{$c->request->body_params};
 
     my $email     = $c->req->body_params->{email};
     my $user_name = $c->req->body_params->{user_name};
@@ -49,6 +51,11 @@ sub signup : Chained("/") : PathPart : Args(0) {
 	    dt_updated => \"now()",
 	}
 	);
+}
+
+sub logout : Chained("/") : PathPart : Args(0) {
+    my ( $self, $c ) = @_;
+    $c->logout;
 }
 
 
