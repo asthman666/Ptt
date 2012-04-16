@@ -25,7 +25,7 @@ use Catalyst qw/
 
     Session
     Session::State::Cookie
-    Session::Store::FastMmap
+    Session::Store::Memcached
 /;
 
 extends 'Catalyst';
@@ -59,6 +59,13 @@ __PACKAGE__->config(
 		user_model => 'PttDB::User',
 	    }
 	},	
+    },
+
+    'Plugin::Session' => {
+        memcached_new_args => {
+            'data' => [ "127.0.0.1:11211" ],
+        },
+        cookie_expires => 0,   # session cookie, which will die when the user's browser is shut down.
     },
 
     'View::TT' => {

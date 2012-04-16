@@ -19,6 +19,9 @@ requires 'Config::General'; # This should reflect the config file format you've 
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::View::TT';
+requires 'Catalyst::Plugin::Session';
+requires 'Catalyst::Plugin::Session::State::Cookie';
+requires 'Catalyst::Plugin::Session::Store::Memcached';
 
 test_requires 'Test::More' => '0.88';
 catalyst;
