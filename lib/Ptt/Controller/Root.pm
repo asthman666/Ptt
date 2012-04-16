@@ -28,6 +28,12 @@ The root page (/)
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+    my $results = [$c->model("PttDB::BestItem")->all];
+
+    foreach ( @$results ) {
+	$c->log->debug("=========" . $_->title);
+    }
+    $c->stash(results => $results);
 }
 
 =head2 default

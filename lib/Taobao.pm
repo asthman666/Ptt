@@ -76,7 +76,10 @@ sub finalize {
     my $results = shift;
     
     foreach ( @$results ) {
-	$_->{pic_url} =~ s{\.jpg$}{.jpg_sum.jpg} if $_->{pic_url};
+	if ($_->{pic_url}) {
+	    ($_->{pic_small_url} = $_->{pic_url}) =~ s{\.jpg$}{.jpg_sum.jpg};
+	    ($_->{pic_big_url}   = $_->{pic_url}) =~ s{\.jpg$}{.jpg_b.jpg};	    
+	}
 	$_->{commission_rate} = sprintf("%.2f", $_->{commission_rate}/100) . "%" if $_->{commission_rate};
     }
 }

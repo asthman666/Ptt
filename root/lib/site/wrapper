@@ -5,14 +5,15 @@
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="/static/css/site.css">
 </head>
 <body>
 <div class="container">
 <header>
 <div class="row">  
-  <span class="span12">
-    <form class="well form-search" action="/search" style="padding-left:460px;">  
-      <input type="text" class="input-xlarge search-query" autocomplete="off" value="[% c.req.params.q %]" maxlength="300" name="q">  
+  <span class="span12 offset3">
+    <form class="form-search" action="/search" style="margin-top:20px;">  
+      <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q %]" name="q">  
       <button type="submit" class="btn">Search</button>  
     </form>  
   </span>

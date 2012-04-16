@@ -47,7 +47,7 @@ foreach my $h ( @$results ) {
 	    dt_created => \"now()",
 	    dt_updated => \"now()",
 	    title => $h->{title},
-	    pic_url => $h->{pic_url},
+	    pic_url => $h->{pic_big_url},
 	    price => $h->{price},
 	    click_url => $h->{click_url},
 	    nick => $h->{nick},
