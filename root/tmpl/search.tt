@@ -26,7 +26,7 @@
     [% index = 0 %]
     [% FOREACH row IN results %]
         <tr>
-            <td width=10%><img src="[% row.pic_url %]"></td>
+            <td width=10%><img src="[% row.pic_small_url %]"></td>
 	    <td width=35%>
 	        <table>
 		    <tr><td><a target=_blank href="[% row.click_url || row.detail_url %]">[% row.title %]</a></td></tr>
