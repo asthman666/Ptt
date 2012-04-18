@@ -8,6 +8,11 @@ use Ptt::Schema;
 use Ptt;
 use Data::Dumper;
 
+my $cid = shift;
+exit(0) unless $cid;
+
+my @cids = split(/,/, $cid);
+
 my $connect_info = Ptt->config->{"Model::PttDB"}->{connect_info};
 my $dsn      = delete $connect_info->{dsn};
 my $user     = delete $connect_info->{user};
@@ -29,32 +34,35 @@ my $taobaoke_itemsget = Taobao::Taobaoke::ItemsGet->new(
     secret_key => $secret_key, 
 );
 
-my $api_params = {
-    fields => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate',
-    method => 'taobao.taobaoke.items.get',
-    nick   => $nick,
-    cid    => 1512,
-    sort   => 'commissionNum_desc',
-};
+foreach ( @cids ) {
+    my $api_params = {
+	fields => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate',
+	method => 'taobao.taobaoke.items.get',
+	nick   => $nick,
+	cid    => $_,
+	sort   => 'commissionNum_desc',
+    };
 
-my ($results) = $taobaoke_itemsget->get($api_params);
+    my ($results) = $taobaoke_itemsget->get($api_params);
 
-foreach my $h ( @$results ) {
-    print $h->{num_iid} . "\n";
-    $schema->resultset('BestItem')->update_or_create(
-	{
-	    item_id => $h->{num_iid},
-	    dt_created => \"now()",
-	    dt_updated => \"now()",
-	    title => $h->{title},
-	    pic_url => $h->{pic_big_url},
-	    price => $h->{price},
-	    click_url => $h->{click_url},
-	    nick => $h->{nick},
-	    score => $h->{seller_credit_score},
-	    volume => $h->{volume},
-	}
-	);
+    foreach my $h ( @$results ) {
+	print $h->{num_iid} . "\n";
+	$schema->resultset('BestItem')->update_or_create(
+	    {
+		item_id => $h->{num_iid},
+		dt_created => \"now()",
+	        dt_updated => \"now()",
+		title => $h->{title},
+		pic_url => $h->{pic_big_url},
+		price => $h->{price},
+		click_url => $h->{click_url},
+		nick => $h->{nick},
+		score => $h->{seller_credit_score},
+		volume => $h->{volume},
+	    }
+	    );
+    }
+
 }
 
 
