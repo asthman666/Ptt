@@ -20,3 +20,5 @@
     </div>
   [% i = 0; END; %]
 [% END %]
+
+[% INCLUDE page.tt %]

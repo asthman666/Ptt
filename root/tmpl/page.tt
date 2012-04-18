@@ -1,0 +1,27 @@
+<div class="row">
+<span class="span10 offset4">
+<div class="pagination">
+  <ul>
+    [% IF page.data_page.previous_page %]
+      [% params.p = page.data_page.previous_page %]
+      <li><a href="[% c.req.uri_with({ p => page.data_page.previous_page }) %]">上一页</a></li>
+    [% END %]
+
+
+    [% FOREACH page_num IN page.before_page_list %]
+      <li><a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a></li>
+    [% END %]
+
+    <li class="active"><a href="#">[% page.data_page.current_page %]</a></li>
+
+    [% FOREACH page_num IN page.after_page_list %]
+      <li><a href="[% c.req.uri_with({ p => page_num }) %]">[% page_num %]</a></li>
+    [% END %]
+
+    [% IF page.data_page.next_page %]
+      <li class="next"><a href="[% c.req.uri_with({ p => page.data_page.next_page }) %]">下一页</a></li>
+    [% END %]
+  </ul>
+</div>
+</span>
+</div>

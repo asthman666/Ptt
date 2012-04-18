@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
+use Page;
+
 #
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
@@ -28,8 +30,27 @@ The root page (/)
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-    my $results = [$c->model("PttDB::BestItem")->all];
-    $c->stash(results => $results);
+    $self->best_item($c, $c->req->params->{p});
+}
+
+sub best_item {
+    my ( $self, $c, $p ) = @_;
+    $p ||= 1;
+
+    my $rs = $c->model("PttDB::BestItem")->search(undef, 
+						  {
+						      page => $p,
+						      rows => $c->config->{page_size},
+						      order_by => "volume desc",
+						  });
+    my $results = [$rs->all];
+    my $data_page = $rs->pager;
+    my $page = Page->new(data_page => $data_page);
+    $page->paging;
+    
+    $c->stash(results => $results,
+	      page => $page,
+	);
 }
 
 =head2 default
