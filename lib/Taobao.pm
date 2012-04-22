@@ -6,6 +6,7 @@ use Digest::MD5 qw(md5_hex);
 use POSIX;
 use LWP::UserAgent;
 use JSON;
+use Debug;
 
 sub new {
     my $class = shift;
@@ -57,6 +58,9 @@ sub url {
 	push @p, "$_=$params{$_}";
     }
     my $url = "http://gw.api.taobao.com/router/rest?" . join("&", @p);
+
+    debug("get url $url");
+
     return $url;
 }
 

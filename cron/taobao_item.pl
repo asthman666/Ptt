@@ -45,6 +45,8 @@ foreach ( @cids ) {
 
     my ($results) = $taobaoke_itemsget->get($api_params);
 
+    sleep 1;
+
     foreach my $h ( @$results ) {
 	print $h->{num_iid} . "\n";
 	$schema->resultset('BestItem')->update_or_create(

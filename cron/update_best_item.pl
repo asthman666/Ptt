@@ -7,6 +7,7 @@ use Taobao::Taobaoke::ItemsConvert;
 use Ptt::Schema;
 use Ptt;
 use Data::Dumper;
+use Debug;
 
 my $connect_info = Ptt->config->{"Model::PttDB"}->{connect_info};
 my $dsn      = delete $connect_info->{dsn};
@@ -46,7 +47,7 @@ while ( 1 ) {
 
     last unless @results;
 
-    print "page_num: $page\n";
+    debug("page_num: $page");
 
     $page++;
 
@@ -58,6 +59,8 @@ while ( 1 ) {
 
     my @api_num_iids = map {$_->{num_iid}} @$api_results;
 
+    debug("found num of api_num_iids: " . scalar(@api_num_iids));
+
     # find diff
     delete @num_iids{@api_num_iids};
 
@@ -65,12 +68,12 @@ while ( 1 ) {
 }
 
 if ( @need_delete ) {
-    print "need to delete item_id: " . join(",", @need_delete) . "\n";
+    debug("need to delete item_id: " . join(",", @need_delete));
     $schema->resultset('BestItem')->search({item_id => {-in => \@need_delete}})->delete;
 }
 
 if ( @need_update ) {
-    print "need to update item count: " . scalar(@need_update) . "\n";
+    debug("need to update item count: " . scalar(@need_update));
     foreach my $h ( @need_update ) {
 	$schema->resultset('BestItem')->update_or_create(
 	    {
