@@ -1,0 +1,14 @@
+     	  <div class="well">
+     	  <p><img src="[% info.image_url %]"></p>
+     	  <p>ISBN-10: [% info.attr.isbn10 %]</p>	  
+     	  <p>ISBN-13: [% info.attr.isbn13 %]</p>	  
+     	  <p>书名: [% info.title %]</p>
+     	  <p>作者: [% info.author.join(", ") %]</p>
+     	  <p>出版社: [% info.attr.publisher %]</p>
+     	  <p>出版年: [% info.attr.pubdate %]</p>
+     	  <p>装帧: [% info.attr.binding %]</p>
+          <p class="btn pull-right">
+             <a href="[% row.click_url %]" target=_blank>卖</a>
+          </p>
+	  </div>
+

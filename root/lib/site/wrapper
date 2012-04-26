@@ -1,8 +1,12 @@
+[% IF no_wrapper %]
+[% content %]
+[% ELSE %]
 <!DOCTYPE html>   
 <html lang="en">   
 <head>   
 <meta charset="utf-8">   
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/static/js/ptt.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
 <link rel="stylesheet" type="text/css" href="/static/css/site.css">
@@ -11,11 +15,17 @@
 <div class="container">
 <header>
 <div class="row">  
-  <span class="span12 offset3">
-    <form class="form-search" action="/search" style="margin-top:20px;">  
+  <span class="span7 offset2">
+    <form class="form-search ptt_mt" action="/search">  
       <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q %]" name="q">  
       <button type="submit" class="btn">Search</button>  
     </form>  
+  </span>
+  <span class="ptt_span0 btn ptt_mt">
+    <a href="[% c.uri_for(c.controller('User').action_for('signup')) %]">注册</a>
+  </span>
+  <span class="ptt_span0 btn ptt_mt">
+    <a href="[% c.uri_for(c.controller('User').action_for('login')) %]">登陆</a>
   </span>
 </div>
 </header>
@@ -30,3 +40,4 @@
 </div>
 </body>
 </html>
+[% END %]
