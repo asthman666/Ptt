@@ -15,7 +15,10 @@
 <div class="container">
 <header>
 <div class="row">  
-  <span class="span7 offset2">
+  <span class="span2 ptt_offset0">
+    <a href="/"><img src="/static/images/logo.png"></a>
+  </span>
+  <span class="span7">
     <form class="form-search ptt_mt" action="/search">  
       <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q %]" name="q">  
       <button type="submit" class="btn">Search</button>  
