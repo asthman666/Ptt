@@ -15,7 +15,7 @@
 <div class="container">
 <header>
 <div class="row">  
-  <span class="span2 ptt_offset0">
+  <span class="ptt_span2 ptt_offset0">
     <a href="/"><img src="/static/images/logo.png"></a>
   </span>
   <span class="span7">
