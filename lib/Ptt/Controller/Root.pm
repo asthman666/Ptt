@@ -58,8 +58,8 @@ sub best_item {
 
     my $facet_rs = $c->model("PttDB::BestItem")->search({}, 
 						     {
-							 select   => ['cid', { count => "*" }], 
-							 as       => [qw(id count)],
+							 select   => ['cid', 'root_cid', { count => "*" }], 
+							 as       => [qw(id rcid count)],
 							 group_by => [qw(cid)]
 						     });
     
@@ -81,7 +81,8 @@ sub best_item {
 	$t->{name}      = $cid_map{$_->get_column('id')};
 	$t->{id}        = $_->get_column('id');
 	$t->{count}     = $_->get_column('count');
-	push @$facet, $t;
+	$t->{rcid}      = $_->get_column('rcid');
+	push @{$facet->{$_->get_column('rcid')}}, $t;
     }
 
     $c->stash(results => $results,
