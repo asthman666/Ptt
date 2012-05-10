@@ -2549,10 +2549,10 @@ input[type="submit"].btn.btn-mini {
 }
 .nav-tabs > li > a,
 .nav-pills > li > a {
-  padding-right: 12px;
-  padding-left: 12px;
+  padding-right: 5px;
+  padding-left: 5px;
   margin-right: 2px;
-  line-height: 14px;
+  line-height: 12px;
 }
 .nav-tabs {
   border-bottom: 1px solid #ddd;
@@ -2581,8 +2581,8 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 .nav-pills > li > a {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   margin-top: 2px;
   margin-bottom: 2px;
   -webkit-border-radius: 5px;

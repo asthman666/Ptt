@@ -96,6 +96,20 @@ __PACKAGE__->table("best_item");
   extra: {unsigned => 1}
   is_nullable: 0
 
+=head2 root_cid
+
+  data_type: 'integer'
+  default_value: 0
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 cid
+
+  data_type: 'integer'
+  default_value: 0
+  extra: {unsigned => 1}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -144,6 +158,20 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 0,
   },
+  "root_cid",
+  {
+    data_type => "integer",
+    default_value => 0,
+    extra => { unsigned => 1 },
+    is_nullable => 0,
+  },
+  "cid",
+  {
+    data_type => "integer",
+    default_value => 0,
+    extra => { unsigned => 1 },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -159,8 +187,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("item_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07015 @ 2012-04-16 22:58:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8xMRaAKZsjSqe2rU5zed6A
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-05-10 22:03:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgm2jLv64jLUa/W8bEJiiw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

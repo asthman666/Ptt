@@ -22,6 +22,13 @@ requires 'Catalyst::View::TT';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Session::Store::Memcached';
+requires 'Catalyst::Plugin::Authentication';
+requires 'DBIx::Class';
+requires 'Catalyst::Model::DBIC::Schema';
+requires 'XML::Simple';
+requires 'MooseX::MarkAsMethods';
+requires 'MooseX::NonMoose';
+requires 'DBIx::Class::Schema::Loader';
 
 test_requires 'Test::More' => '0.88';
 catalyst;

@@ -4,6 +4,7 @@ use warnings;
 use FindBin qw/$Bin/;
 use lib "$Bin/../lib";
 use Taobao::Taobaoke::ItemsGet;
+use Taobao::ItemList;
 use Ptt::Schema;
 use Ptt;
 use Data::Dumper;
@@ -34,9 +35,14 @@ my $taobaoke_itemsget = Taobao::Taobaoke::ItemsGet->new(
     secret_key => $secret_key, 
 );
 
+my $taobao_itemlist = Taobao::ItemList->new(
+    app_key => $app_key, 
+    secret_key => $secret_key, 
+);
+
 foreach ( @cids ) {
     my $api_params = {
-	fields => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate',
+	fields => 'num_iid,title,nick,pic_url,price,click_url,seller_credit_score,volume,item_location,commission,commission_rate,cid',
 	method => 'taobao.taobaoke.items.get',
 	nick   => $nick,
 	cid    => $_,
@@ -45,10 +51,34 @@ foreach ( @cids ) {
 
     my ($results) = $taobaoke_itemsget->get($api_params);
 
+    print "result num: " . scalar(@$results) . "\n";
+
     sleep 1;
 
+    my %seen;
+
+    my @num_iids;
+    foreach ( @$results ) {
+	push @num_iids, $_->{num_iid};
+	if ( @num_iids == 20 ) {
+	    my $items = $taobao_itemlist->get(\@num_iids);
+
+	    sleep 1;
+
+	    foreach ( @$items ) {
+		$seen{$_->{num_iid}} = $_->{cid};
+	    }
+	    
+	    @num_iids = ();
+	}
+    }
+
     foreach my $h ( @$results ) {
-	print $h->{num_iid} . "\n";
+	my $cid = $seen{$h->{num_iid}};
+
+	my $tree = $schema->resultset('Cid')->find($cid)->cid_tree;
+	my $root_cid = (split(/>/, $tree))[1];
+
 	$schema->resultset('BestItem')->update_or_create(
 	    {
 		item_id => $h->{num_iid},
@@ -61,6 +91,8 @@ foreach ( @cids ) {
 		nick => $h->{nick},
 		score => $h->{seller_credit_score},
 		volume => $h->{volume},
+		cid => $cid,
+		root_cid => $root_cid,
 	    }
 	    );
     }

@@ -52,6 +52,9 @@ create table best_item (
        score        tinyint unsigned default 0  not null,
        volume       int unsigned     default 0  not null,
 
+       root_cid     int unsigned     default 0  not null,
+       cid          int unsigned     default 0  not null,
+
        primary key (item_id)
 ) engine=innodb;
 

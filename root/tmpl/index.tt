@@ -1,3 +1,13 @@
+<div class="row">
+<div class="span3">
+<ul class="nav nav-pills well">
+  [% FOREACH f IN facet %]
+    <li [% IF f.id == c.req.params.cid %]class="active"[% END %]><a href="[% c.req.uri_with({ cid => f.id }) %]">[% f.name %]</a></li>
+  [% END %]
+</ul>
+</div>
+</div>
+
 [% i = 0 %]
 [% FOREACH row IN results; 
    i = i + 1; %]

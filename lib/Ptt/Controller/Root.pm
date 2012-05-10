@@ -12,6 +12,8 @@ use Page;
 #
 __PACKAGE__->config(namespace => '');
 
+use Data::Dumper;
+
 =head1 NAME
 
 Ptt::Controller::Root - Root Controller for Ptt
@@ -30,14 +32,20 @@ The root page (/)
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-    $self->best_item($c, $c->req->params->{p});
+    $self->best_item($c);
 }
 
 sub best_item {
-    my ( $self, $c, $p ) = @_;
-    $p ||= 1;
+    my ( $self, $c ) = @_;
+    my $p   = $c->req->params->{p};
+    my $cid = $c->req->params->{cid};
 
-    my $rs = $c->model("PttDB::BestItem")->search(undef, 
+    $p ||= 1;
+    
+    my %search_cond;
+    $search_cond{cid} = $cid if $cid;
+
+    my $rs = $c->model("PttDB::BestItem")->search(\%search_cond,
 						  {
 						      page => $p,
 						      rows => $c->config->{page_size},
@@ -47,9 +55,38 @@ sub best_item {
     my $data_page = $rs->pager;
     my $page = Page->new(data_page => $data_page);
     $page->paging;
+
+    my $facet_rs = $c->model("PttDB::BestItem")->search({}, 
+						     {
+							 select   => ['cid', { count => "*" }], 
+							 as       => [qw(id count)],
+							 group_by => [qw(cid)]
+						     });
     
+    my $db_facet = [$facet_rs->all];
+    
+    my @all_cids = map { $_->get_column('id') } @$db_facet;
+    
+    my %cid_map;
+
+    my $cid_rs = $c->model("PttDB::Cid")->search({ cid => { -in => [@all_cids] } });
+    
+    while ( my $t = $cid_rs->next ) {
+	$cid_map{$t->cid} = $t->name;
+    }
+
+    my $facet;
+    foreach ( @$db_facet ) {
+	my $t;
+	$t->{name}      = $cid_map{$_->get_column('id')};
+	$t->{id}        = $_->get_column('id');
+	$t->{count}     = $_->get_column('count');
+	push @$facet, $t;
+    }
+
     $c->stash(results => $results,
-	      page => $page,
+	      facet   => $facet,
+	      page    => $page,
 	);
 }
 
