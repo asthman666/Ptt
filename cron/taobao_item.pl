@@ -66,7 +66,7 @@ foreach ( @cids ) {
 	    sleep 1;
 
 	    foreach ( @$items ) {
-		$seen{$_->{num_iid}} = $_->{cid};
+		$seen{$_->{num_iid}} = $_;
 	    }
 	    
 	    @num_iids = ();
@@ -74,9 +74,9 @@ foreach ( @cids ) {
     }
 
     foreach my $h ( @$results ) {
-	my $cid = $seen{$h->{num_iid}};
+	%$h = (%$h, %{$seen{$h->{num_iid}}});
 
-	my $tree = $schema->resultset('Cid')->find($cid)->cid_tree;
+	my $tree = $schema->resultset('Cid')->find($h->{cid})->cid_tree;
 	my $root_cid = (split(/>/, $tree))[1];
 
 	$schema->resultset('BestItem')->update_or_create(
@@ -91,8 +91,9 @@ foreach ( @cids ) {
 		nick => $h->{nick},
 		score => $h->{seller_credit_score},
 		volume => $h->{volume},
-		cid => $cid,
+		cid => $h->{cid},
 		root_cid => $root_cid,
+		freight_payer => $h->{freight_payer},
 	    }
 	    );
     }

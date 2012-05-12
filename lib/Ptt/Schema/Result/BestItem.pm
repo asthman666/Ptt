@@ -110,6 +110,13 @@ __PACKAGE__->table("best_item");
   extra: {unsigned => 1}
   is_nullable: 0
 
+=head2 freight_payer
+
+  data_type: 'enum'
+  default_value: 'buyer'
+  extra: {list => ["buyer","seller"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -172,6 +179,13 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 0,
   },
+  "freight_payer",
+  {
+    data_type => "enum",
+    default_value => "buyer",
+    extra => { list => ["buyer", "seller"] },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -187,8 +201,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("item_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-05-10 22:03:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgm2jLv64jLUa/W8bEJiiw
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-05-12 10:42:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MM6pEwiQp3Lmrp7Klkv1vg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

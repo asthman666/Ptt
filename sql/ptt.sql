@@ -55,6 +55,8 @@ create table best_item (
        root_cid     int unsigned     default 0  not null,
        cid          int unsigned     default 0  not null,
 
+       freight_payer enum('buyer','seller') default 'buyer' not null,
+
        primary key (item_id)
 ) engine=innodb;
 

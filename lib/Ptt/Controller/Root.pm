@@ -39,12 +39,13 @@ sub best_item {
     my ( $self, $c ) = @_;
     my $p   = $c->req->params->{p};
     my $cid = $c->req->params->{cid};
+    my $fs  = $c->req->params->{fs};
 
     $p ||= 1;
     
     my %search_cond;
     $search_cond{cid} = $cid if $cid;
-
+    $search_cond{freight_payer} = 'seller' if $fs;
     my $rs = $c->model("PttDB::BestItem")->search(\%search_cond,
 						  {
 						      page => $p,
