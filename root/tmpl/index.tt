@@ -13,7 +13,7 @@
 </div>
 [% END %]
   [% i = i+1; IF i == 4; i = 0; END; END %]
-[% IF i != 3 %]
+[% IF i != 0 %]
 </div>
 [% END %]
 
