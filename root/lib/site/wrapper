@@ -6,6 +6,7 @@
 <head>   
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>[% IF title %][% title %] | [% END %]葡萄淘,不错哦 - 包邮,限时打折,淘宝高销量哦</title>
+<meta name="description" content="葡萄淘-[% title %]-包邮,限时打折,淘宝高销量哦">
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ptt.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
