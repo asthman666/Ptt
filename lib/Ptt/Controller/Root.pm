@@ -90,6 +90,10 @@ sub best_item {
 	      facet   => $facet,
 	      page    => $page,
 	);
+    
+    if ( $cid ) {
+	$c->stash(title => $cid_map{$cid});
+    }
 }
 
 =head2 default
