@@ -28,11 +28,14 @@ my $schema = Ptt::Schema->connect(
 
 my @cids;
 foreach ( @cats ) {
+    sleep 5;
+
     my $ua = LWP::UserAgent->new();
     $ua->agent('Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20100101 Firefox/12.0');
 
     my $resp = $ua->get("http://top.taobao.com/level3.php?cat=$_");
     my $content =$resp->decoded_content();
+
     while ( $content =~ /level3=(\d+)/g ) {
 	if ( $schema->resultset('Cid')->find($1) ) {
 	    push @cids, $1;
