@@ -1,9 +1,10 @@
-  [% i = 0; FOREACH rcid IN facet.keys; %]
+[% i = 0; FOREACH rcid IN facet.keys; %]
 [% IF i == 0 %]
 <div class="row">
 [% END %]
     <div class="span3">
       <ul class="nav nav-pills well well-small">
+        <div class="badge badge-important" style="text-align:center;">[% cid_map.$rcid %]</div>
         [% FOREACH f IN facet.$rcid %]
           <li [% IF f.id == c.req.params.cid %]class="active"[% END %]><a href="[% c.req.uri_with({ p => [], cid => f.id }) %]">[% f.name %]</a></li>
         [% END %]
@@ -12,7 +13,7 @@
 [% IF i == 3 %]
 </div>
 [% END %]
-  [% i = i+1; IF i == 4; i = 0; END; END %]
+[% i = i+1; IF i == 4; i = 0; END; END %]
 [% IF i != 0 %]
 </div>
 [% END %]

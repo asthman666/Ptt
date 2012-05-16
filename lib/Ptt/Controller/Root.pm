@@ -66,11 +66,13 @@ sub best_item {
     
     my $db_facet = [$facet_rs->all];
     
-    my @all_cids = map { $_->get_column('id') } @$db_facet;
+    my %all_cids  = map { $_->get_column('id') => 1 } @$db_facet;
+    my %all_rcids = map { $_->get_column('rcid') => 1 } @$db_facet;
+    %all_cids = (%all_cids, %all_rcids);
     
     my %cid_map;
 
-    my $cid_rs = $c->model("PttDB::Cid")->search({ cid => { -in => [@all_cids] } });
+    my $cid_rs = $c->model("PttDB::Cid")->search({ cid => { -in => [ keys %all_cids] } });
     
     while ( my $t = $cid_rs->next ) {
 	$cid_map{$t->cid} = $t->name;
@@ -89,6 +91,7 @@ sub best_item {
     $c->stash(results => $results,
 	      facet   => $facet,
 	      page    => $page,
+	      cid_map => \%cid_map,
 	);
     
     if ( $cid ) {
