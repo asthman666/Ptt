@@ -1,4 +1,4 @@
-[% IF results %]
+[% IF results.size %]
 [% i = 0; FOREACH rcid IN facet.keys; %]
 [% IF i == 0 %]
 <div class="row">
