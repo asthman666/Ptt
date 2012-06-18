@@ -60,7 +60,6 @@ create table best_item (
        primary key (item_id)
 ) engine=innodb;
 
-
 drop table if exists data;
 
 create table data (
@@ -103,4 +102,29 @@ create table data_rating (
        average     decimal(10,1) default 0 not null,
        num_rate    smallint unsigned default 0 not null,
        index douban_id (douban_id)
+) engine=innodb;
+
+
+drop table if exists item;
+create table item (
+       id           char(22) binary default '' not null,
+       title  	    varchar(255)    default '' not null,
+       image_url    varchar(255)    default '' not null,
+       url          varchar(1024)   default '' not null,
+       primary key (id)
+) engine=innodb;
+
+drop table if exists item_price;
+create table item_price (
+       id           char(22) binary default '' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       price        decimal(10,2) default 0 not null,
+       index id (id)
+) engine=innodb;
+
+drop table if exists user_item;
+create table user_item (
+       uid          int unsigned    default 0 not null,
+       id           char(22) binary default '' not null,
+       primary key (uid,id)
 ) engine=innodb;

@@ -20,6 +20,7 @@
   <span class="ptt_span2 ptt_offset0">
     <a href="/"><img src="/static/images/logo.png"></a>
   </span>
+
 <!--
   <span class="span7">
     <form class="form-search ptt_mt" action="/search">  
@@ -27,13 +28,14 @@
       <button type="submit" class="btn">Search</button>  
     </form>  
   </span>
+-->
   <span class="ptt_span0 btn ptt_mt">
     <a href="[% c.uri_for(c.controller('User').action_for('signup')) %]">注册</a>
   </span>
   <span class="ptt_span0 btn ptt_mt">
     <a href="[% c.uri_for(c.controller('User').action_for('login')) %]">登陆</a>
   </span>
--->
+
 </div>
 </header>
 

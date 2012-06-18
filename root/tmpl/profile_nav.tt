@@ -4,7 +4,7 @@
       <div class="nav-collapse">
          <ul class="nav">
            <li class="active">
-	     <a href="/profile/book">图书</a>
+	     <a href="/profile/list">搜网址</a>
 	   </li>
 	 </ul>
       </div>

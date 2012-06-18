@@ -1,12 +1,12 @@
 <div class="row">
-<span class="span6 offset4">
+<span class="span10 offset2">
 <div class="form-search ptt_mt">  
-      ISBN-10/ISBN-13: <input id="data-ean" type="text" class="input-large search-query">  
+      网址: <input id="data-q" type="text" class="input-xxlarge search-query">  
       <button class="btn" id="eanlookup">找</button>  
 </div>  
 </span>
 </div>
 
 <div class="row">
-    <div id="info" class="ptt_mt span4 offset4"></div>
+    <div id="info" class="ptt_mt span6" style="margin-left:265px;"></div>
 </div>
