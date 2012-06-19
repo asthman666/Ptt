@@ -40,6 +40,27 @@ __PACKAGE__->table("user_item");
   is_nullable: 0
   size: 22
 
+=head2 active
+
+  data_type: 'enum'
+  default_value: 'y'
+  extra: {list => ["y","n"]}
+  is_nullable: 0
+
+=head2 dt_created
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  default_value: '0000-00-00 00:00:00'
+  is_nullable: 0
+
+=head2 dt_updated
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  default_value: '0000-00-00 00:00:00'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -52,6 +73,27 @@ __PACKAGE__->add_columns(
   },
   "id",
   { data_type => "char", default_value => "", is_nullable => 0, size => 22 },
+  "active",
+  {
+    data_type => "enum",
+    default_value => "y",
+    extra => { list => ["y", "n"] },
+    is_nullable => 0,
+  },
+  "dt_created",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    default_value => "0000-00-00 00:00:00",
+    is_nullable => 0,
+  },
+  "dt_updated",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    default_value => "0000-00-00 00:00:00",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -69,8 +111,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("uid", "id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-06-18 22:17:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bL6+bS2Gz/cZbfb3YPRmaA
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-06-19 21:55:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ATtRb9hCKqquRzo66or+jw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

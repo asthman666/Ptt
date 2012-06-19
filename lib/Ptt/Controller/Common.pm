@@ -51,17 +51,22 @@ sub item : Chained("/") : PathPart Args(0) {
 	id        => $id,
 	title     => $info->{title},
 	image_url => $info->{image_url},
+	dt_created => \"now()", #"
+	dt_updated => \"now()", #"
 	url       => $url,
 	);
 
-    $c->model('PttDB::ItemPrice')->update_or_create(
+    $c->model('PttDB::ItemPrice')->create({
 	id        => $id,
 	price     => $info->{price},
-	);
+	dt_created => \"now()", #"
+	});
 
     $c->model('PttDB::UserItem')->update_or_create(
 	id        => $id,
 	uid       => $c->user->uid,
+	dt_created => \"now()", #"
+	dt_updated => \"now()", #"
 	);
 
     $c->stash(info => $info, template => "info.tt", no_wrapper => 1);

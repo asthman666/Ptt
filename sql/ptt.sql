@@ -108,6 +108,11 @@ create table data_rating (
 drop table if exists item;
 create table item (
        id           char(22) binary default '' not null,
+
+       active        enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
        title  	    varchar(255)    default '' not null,
        image_url    varchar(255)    default '' not null,
        url          varchar(1024)   default '' not null,
@@ -126,5 +131,10 @@ drop table if exists user_item;
 create table user_item (
        uid          int unsigned    default 0 not null,
        id           char(22) binary default '' not null,
+
+       active        enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
        primary key (uid,id)
 ) engine=innodb;
