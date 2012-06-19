@@ -56,7 +56,6 @@ while ( my $item = $rs->next ) {
 	}
 	$cv->end;
     };
-    last;
 }
 
 $cv->recv;
