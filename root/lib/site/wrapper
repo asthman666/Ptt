@@ -29,12 +29,19 @@
     </form>  
   </span>
 -->
+  [% IF c.user_exists %]
+  <span class="ptt_span0 ptt_mt">
+    <a href="/profile">[% c.user.user_name %]</a>
+  </span>
+  [% ELSE %]
   <span class="ptt_span0 btn ptt_mt">
     <a href="[% c.uri_for(c.controller('User').action_for('signup')) %]">注册</a>
   </span>
   <span class="ptt_span0 btn ptt_mt">
     <a href="[% c.uri_for(c.controller('User').action_for('login')) %]">登陆</a>
   </span>
+  [% END %]
+
 
 </div>
 </header>
