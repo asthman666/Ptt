@@ -11,6 +11,12 @@ use Data::Dumper;
 sub item : Chained("/") : PathPart Args(0) {
     my ( $self, $c ) =@_;
 
+    unless ( $c->user_exists() ) {
+	$c->res->redirect($c->uri_for($c->controller('User')->action_for('login')));
+	$c->detach();
+	return;
+    }
+
     my $q = $c->req->params->{q};
 
     my $asin;

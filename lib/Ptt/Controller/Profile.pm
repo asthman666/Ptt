@@ -19,14 +19,27 @@ sub profile : Chained("base") : PathPart("") : Args(0) {
     $c->stash(template => "profile.tt");
 }
 
-sub list : Chained("base") : PathPart("list") : Args(0) {
+sub list : Chained("base") : PathPart : Args(0) {
     my ( $self, $c ) = @_;
     $c->stash(template => "list.tt");
 }
 
-sub book : Chained("base") : PathPart("book") : Args(0) {
+sub list_result : Chained("base") : PathPart : Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash(template => "profile_book.tt");
+
+    my $uid = $c->user->uid;
+
+    my $items_rs = $c->model('PttDB::User')->find($uid)->items;
+
+    my $results;
+    while ( my $item = $items_rs->next ) {
+	my $top_price = $item->item_price->search({}, {order_by => "dt_created desc", rows => 1})->single;
+	my %hh = $item->get_columns;
+	$hh{price} = $top_price->get_column('price');
+	push @$results, \%hh;
+    }
+
+    $c->stash(template => "list_result.tt", results => $results);
 }
 
 1;

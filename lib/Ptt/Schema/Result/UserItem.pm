@@ -114,6 +114,8 @@ __PACKAGE__->set_primary_key("uid", "id");
 # Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-06-19 21:55:07
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ATtRb9hCKqquRzo66or+jw
 
+__PACKAGE__->belongs_to(user => 'Ptt::Schema::Result::User', 'uid');
+__PACKAGE__->belongs_to(item => 'Ptt::Schema::Result::Item', 'id');
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

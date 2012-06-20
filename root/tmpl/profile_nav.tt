@@ -1,10 +1,13 @@
 <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <div class="nav-collapse">
-         <ul class="nav">
-           <li class="active">
+      <div class="subnav">
+         <ul class="nav nav-pills">
+	   [% IF c.action.name == 'list' %]<li class="active">[% ELSE %]<li>[% END %]
 	     <a href="/profile/list">搜网址</a>
+	   </li>
+	   [% IF c.action.name == 'list_result' %]<li class="active">[% ELSE %]<li>[% END %]
+	     <a href="/profile/list_result">我的监控</a>
 	   </li>
 	 </ul>
       </div>

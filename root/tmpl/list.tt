@@ -1,3 +1,4 @@
+[% INCLUDE profile_nav.tt %]
 <div class="row">
 <span class="span10 offset2">
 <div class="form-search ptt_mt">  

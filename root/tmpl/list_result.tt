@@ -1,0 +1,25 @@
+[% INCLUDE profile_nav.tt %]
+[% IF results.size %]
+[% i = 0 %]
+[% FOREACH row IN results; 
+   i = i + 1; %]
+  [% IF i == 1 %]
+    <div class="row">
+  [% END %]
+      <div class="span3">
+      	   <div class="well">
+	     <img src="[% row.image_url %]" width=220 height=220>
+	     <p><h4><a href='[% row.url %]' target=_blank>[% row.title %]</a></h4></p>
+	     <p>￥<span class="price">[% row.price %]</span></p>
+	     <p class="btn pull-right">
+	       <a href="[% row.url %]" target=_blank>去购物</a>
+	     </p>
+           </div>
+      </div>
+  [% IF i == 4 %]
+    </div>
+  [% i = 0; END; %]
+[% END %]
+
+[% INCLUDE page.tt %]
+[% END %]
