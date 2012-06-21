@@ -9,6 +9,7 @@ use AnyEvent::HTTP;
 use Encode;
 use Ptt;
 use Data::Dumper;
+use IO::Uncompress::Gunzip;
 
 binmode STDOUT, ":encoding(UTF-8)";
 
@@ -36,16 +37,16 @@ while ( my $item = $rs->next ) {
 
     http_get $item->url,
     headers => { "user-agent" => "Mozilla/5.0 (Windows NT 6.1; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-		 "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-		 "Accept-Language" => "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3",
-		 #"Accept-Encoding" => "gzip, deflate",
+		 "Accept-Encoding" => "gzip, deflate",
     },
     sub {
 	my ( $body, $hdr ) = @_;
 	print $hdr->{Status}, "\n";
 	#$body = Encode::decode("gbk", $body);
 	my $object = $store_loader->get_object(1);
-	my $results = $object->parse($body);
+	my $output;
+	IO::Uncompress::Gunzip::gunzip(\$body, \$output, Transparent => 0) or die "Can't gunzip content: $IO::Uncompress::Gunzip::GunzipError";
+	my $results = $object->parse($output);
 	foreach ( @$results ) {
 	    $_->{price} =~ s{,}{}g;
 	    $schema->resultset('ItemPrice')->create({id => $item->id,
