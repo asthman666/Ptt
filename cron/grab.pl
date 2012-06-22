@@ -47,7 +47,9 @@ while ( my $item = $rs->next ) {
 	my $output;
 	IO::Uncompress::Gunzip::gunzip(\$body, \$output, Transparent => 0) or die "Can't gunzip content: $IO::Uncompress::Gunzip::GunzipError";
 	my $results = $object->parse($output);
+
 	foreach ( @$results ) {
+	    next if $_->{availability} eq 'out of stock';
 	    $_->{price} =~ s{,}{}g;
 	    $schema->resultset('ItemPrice')->create({id => $item->id,
 						     dt_created => \"now()",  #"

@@ -19,6 +19,12 @@ sub parse {
 	$h{price} = $1;
     }
 
+    if ( $body =~ m{目前无货} ) {
+	$h{availability} = "out of stock";
+    } else {
+	$h{availability} = "in stock";
+    }
+
     return [\%h];
 }
 
