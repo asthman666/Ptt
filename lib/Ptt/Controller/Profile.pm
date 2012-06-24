@@ -33,9 +33,28 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 
     my $results;
     while ( my $item = $items_rs->next ) {
-	my $top_price = $item->item_price->search({}, {order_by => "dt_created desc", rows => 1})->single;
+	my $item_price_rs = $item->item_price->search({}, {order_by => "dt_created desc"});
+	
 	my %hh = $item->get_columns;
-	$hh{price} = $top_price->get_column('price');
+
+	my $i;
+	while ( my $item_price = $item_price_rs->next ) {
+	    $i++;
+	    if ( $i == 1 ) {
+		$hh{price} = $item_price->get_column('price');
+	    }
+
+	    my %p = $item_price->get_columns;
+	    $p{dt_created} =~ m{\d{4}-(\d\d)-(\d\d)};
+	    my $m = $1;
+	    my $d = $2;
+	    $m =~ s{^\d}{};
+	    $d =~ s{^\d}{};
+
+	    $p{created} = "$m.$d";
+	    push @{$hh{$hh{id}}}, \%p;
+	}
+
 	push @$results, \%hh;
     }
 
