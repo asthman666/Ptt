@@ -36,6 +36,7 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 	my $item_price_rs = $item->item_price->search({}, {order_by => "dt_created desc"});
 	
 	my %hh = $item->get_columns;
+	my %seen;
 
 	my $i;
 	while ( my $item_price = $item_price_rs->next ) {
@@ -45,15 +46,19 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 	    }
 
 	    my %p = $item_price->get_columns;
-	    $p{dt_created} =~ m{\d{4}-(\d\d)-(\d\d)};
-	    my $m = $1;
-	    my $d = $2;
-	    $m =~ s{^\d}{};
-	    $d =~ s{^\d}{};
+	    
+	    $p{dt_created} =~ m{(\d{4}-\d\d-\d\d)};
 
-	    $p{created} = "$m.$d";
-	    push @{$hh{$hh{id}}}, \%p;
+	    push @{$seen{"$1"}}, \%p;
 	}
+
+	foreach my $date ( keys %seen ) {
+	    @{$seen{$date}} = sort {$a->{price} <=> $b->{price}} @{$seen{$date}};
+	    $seen{$date}->[0]->{dt_created} = $date;
+	    push @{$hh{$hh{id}}}, $seen{$date}->[0];
+	}
+
+	next if @{$hh{$hh{id}}} < 2;  # FIXME: why need to add this, because jqPlot when x-axis have only one value, will cause some wrong!!!
 
 	push @$results, \%hh;
     }

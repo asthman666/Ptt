@@ -14,41 +14,40 @@ $(document).ready(function(){
 
      [% FOREACH p IN row.$id %]
      	var sm = new Array();
-	sm.push([% p.created %]);
+	sm.push('[% p.dt_created %]');
+	//sm.push('2012-08-12 12:12:00');
 	sm.push([% p.price %]);
 	//alert(sm);
 	line1.push(sm);
      [% END %]
 
-//     alert(line1);
-  var plot1 = $.jqplot('[% id %]', [line1], {
-      title:'Price Chart',
-      axes:{
-        xaxis:{
-          tickOptions:{
-            formatString:'%.2f'
-            }
-          //renderer:$.jqplot.DateAxisRenderer,
-          //tickOptions:{
-          //  formatString:'%b&nbsp;%#d'
-          //}
-        },
-        yaxis:{
-          tickOptions:{
-            formatString:'￥%.2f'
-            }
-        }
-      },
-      highlighter: {
-        show: true,
-        sizeAdjust: 7.5
-      },
-      cursor: {
-        show: false
-      }
-  });
+     var num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %]
 
+     var plot1 = $.jqplot('[% id %]', [line1], {
+         title:'价格走势',
+         axes:{
+           xaxis:{
+	   numberTicks: num_ticks,
+           renderer:$.jqplot.DateAxisRenderer,
+           tickOptions:{
+              formatString:'%#m.%#d'
+           }
+           },
+           yaxis:{
+           tickOptions:{
+              formatString:'￥%.2f'
+           }
+           }
+         },
 
+         highlighter: {
+            show: true,
+            sizeAdjust: 7.5
+         },
+         cursor: {
+            show: false
+         }
+     });
   [% END %]
 
 });
@@ -73,7 +72,9 @@ $(document).ready(function(){
            </div>
 	   <div id="[% row.id %]" style="height:200px; width:280px;"></div>
       	   <div class="code prettyprint">
+<!--
 	   <pre class="code prettyprint brush: js"></pre>
+-->
            </div>
       </div>
 
