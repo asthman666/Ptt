@@ -15,25 +15,25 @@ $(document).ready(function(){
      [% FOREACH p IN row.$id %]
      	var sm = new Array();
 	sm.push('[% p.dt_created %]');
-	//sm.push('2012-08-12 12:12:00');
 	sm.push([% p.price %]);
-	//alert(sm);
 	line1.push(sm);
      [% END %]
 
-     var num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %]
+     var x_num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %];
+     var y_num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %];
 
      var plot1 = $.jqplot('[% id %]', [line1], {
          title:'价格走势',
          axes:{
            xaxis:{
-	   numberTicks: num_ticks,
+	   numberTicks: x_num_ticks,
            renderer:$.jqplot.DateAxisRenderer,
            tickOptions:{
               formatString:'%#m.%#d'
            }
            },
            yaxis:{
+	   numberTicks: y_num_ticks,
            tickOptions:{
               formatString:'￥%.2f'
            }
