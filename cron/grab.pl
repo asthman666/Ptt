@@ -6,10 +6,10 @@ use lib "$Bin/../lib";
 use Crawler::StoreLoader;
 use AnyEvent;
 use AnyEvent::HTTP;
-use Encode;
+use HTTP::Message;
+use HTTP::Headers;
 use Ptt;
 use Data::Dumper;
-use IO::Uncompress::Gunzip;
 
 binmode STDOUT, ":encoding(UTF-8)";
 
@@ -42,10 +42,12 @@ while ( my $item = $rs->next ) {
     sub {
 	my ( $body, $hdr ) = @_;
 	print $hdr->{Status}, "\n";
-	#$body = Encode::decode("gbk", $body);
 	my $object = $store_loader->get_object(1);
-	my $output;
-	IO::Uncompress::Gunzip::gunzip(\$body, \$output, Transparent => 0) or die "Can't gunzip content: $IO::Uncompress::Gunzip::GunzipError";
+
+	my $header = HTTP::Headers->new('Content-Encoding' => "gzip, deflate");
+	my $mess = HTTP::Message->new( $header, $body );
+	my $output = $mess->decoded_content;
+
 	my $results = $object->parse($output);
 
 	foreach ( @$results ) {
