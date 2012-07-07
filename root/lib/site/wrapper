@@ -9,6 +9,10 @@
 <meta name="description" content="葡萄淘-[% title %]-包邮,限时打折,淘宝高销量哦">
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ptt.js"></script>
+<script type="text/javascript" src="/static/js/facybox.js"></script>
+
+<link href="/static/css/facybox.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/static/css/facybox_urls.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
 <link rel="stylesheet" type="text/css" href="/static/css/site.css">

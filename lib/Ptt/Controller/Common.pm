@@ -78,4 +78,31 @@ sub item : Chained("/") : PathPart Args(0) {
     $c->stash(info => $info, template => "info.tt", no_wrapper => 1);
 }
 
+sub tag : Chained("/") : PathPart Args(0) {
+    my ( $self, $c ) =@_;
+
+    unless ( $c->user_exists() ) {
+	$c->detach();
+	return;
+    }
+
+    my $tag = $c->req->params->{tag};
+    my $id  = $c->req->params->{id};
+
+    if ( $tag && $id ) {
+	my $tag_object = $c->model("PttDB::Tag")->update_or_create({dt_created => \"now()",  #"
+								    dt_updated => \"now()",  #"
+								    value      => $tag,
+								    uid        => $c->user->uid,
+								   });
+
+	$c->model("PttDB::TagItem")->update_or_create({tag_id => $tag_object->tag_id, id => $id, dt_created => \"now()", dt_updated => \"now()"});  #"
+
+	$c->res->redirect($c->uri_for($c->controller('Profile')->action_for('list_result')));
+	$c->detach();
+    }
+
+    $c->stash(template => "tag.tt", no_wrapper => 1);
+}
+
 1;

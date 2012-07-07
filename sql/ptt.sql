@@ -138,3 +138,30 @@ create table user_item (
 
        primary key (uid,id)
 ) engine=innodb;
+
+drop table if exists tag;
+create table tag (
+       tag_id     int unsigned  auto_increment,
+
+       active       enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
+       uid          int unsigned  default 0 not null,
+       value        varchar(255)  default '' not null,
+
+       primary key (tag_id),
+       unique key (uid, value)
+) engine=innodb;
+
+drop table if exists tag_item;
+create table tag_item (
+       tag_id       int unsigned    default 0 not null,
+       id           char(22) binary default '' not null,
+
+       active       enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
+       primary key (tag_id,id)
+) engine=innodb;

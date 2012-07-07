@@ -1,0 +1,5 @@
+<form action="/tag">
+<input name="tag">
+<input name="id" value="[% c.req.params.id %]" type=hidden>
+<input type="submit" class="button" value="添加标签">
+</form>

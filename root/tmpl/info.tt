@@ -1,6 +1,6 @@
      	  <div class="well">
      	  <p><img src="[% info.image_url %]"></p>
      	  <p>[% info.title %]</p>
-     	  <p>[% info.price %]</p>
+	  <p>￥<span class="price">[% info.price %]</span></p>
 	  </div>
 

@@ -28,16 +28,30 @@ sub list_result : Chained("base") : PathPart : Args(0) {
     my ( $self, $c ) = @_;
 
     my $uid = $c->user->uid;
+    my $tag_id = $c->req->params->{tag_id};
 
-    my $items_rs = $c->model('PttDB::User')->find($uid)->items;
+    my ($results, $tags);
 
-    my $results;
+    $tags = [$c->model('PttDB::Tag')->search({uid => $uid})];
+
+    my $items_rs;
+    if ( $tag_id ) {
+	$items_rs = $c->model("PttDB::Tag")->find($tag_id)->items;
+    } else {
+	$items_rs = $c->model('PttDB::User')->find($uid)->items;
+    }
+
     while ( my $item = $items_rs->next ) {
 	my $item_price_rs = $item->item_price->search({}, {order_by => "dt_created desc"});
 	
 	my %hh = $item->get_columns;
-	my %seen;
 
+	my $item_tag_rs = $item->tags;
+	while ( my $tag = $item_tag_rs->next ) {
+	    push @{$hh{tag}}, $tag->value;
+	}
+
+	my %seen;
 	my $i;
 	while ( my $item_price = $item_price_rs->next ) {
 	    $i++;
@@ -65,7 +79,7 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 	push @$results, \%hh;
     }
 
-    $c->stash(template => "list_result.tt", results => $results);
+    $c->stash(template => "list_result.tt", results => $results, tags => $tags);
 }
 
 1;

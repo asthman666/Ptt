@@ -3,7 +3,18 @@
 <script type="text/javascript" src="/static/js/plugins/jqplot.cursor.min.js"></script>
 <script type="text/javascript" src="/static/js/plugins/jqplot.dateAxisRenderer.min.js"></script>
 
-
+ <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $('a[rel*=facybox]').facybox({
+        // noAutoload: true
+      });
+      
+      $("h2",$("#changelog")).css("cursor","pointer").click(function(){
+          $(this).next().slideToggle('fast');
+      }).trigger("click");
+      
+    });
+  </script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -54,6 +65,21 @@ $(document).ready(function(){
 </script>
 
 [% INCLUDE profile_nav.tt %]
+
+[% IF tags.size %]
+<div class="row">
+   <div class="span12">
+      <ul class="nav nav-pills well well-small">
+         [% i = 0; FOREACH tag IN tags; %]
+           <li [% IF tag.tag_id == c.req.params.tag_id %]class="active"[% END %]><a href="[% c.req.uri_with({ p => [], tag_id => tag.tag_id }) %]">[% tag.value %]</a></li>
+         [% END %]
+      </ul>
+    </div>
+</div>
+[% END %]
+
+<div style="clear:both;"></div>
+
 [% IF results.size %]
 [% i = 0 %]
 [% FOREACH row IN results; 
@@ -66,22 +92,25 @@ $(document).ready(function(){
 	     <img src="[% row.image_url %]" width=220 height=220>
 	     <p><h4><a href='[% row.url %]' target=_blank>[% row.title %]</a></h4></p>
 	     <p>￥<span class="price">[% row.price %]</span></p>
+
+	     [% IF row.tag.size %]
+	     	<p><a href="/tag?id=[% row.id %]" rel="facybox">修改标签</a> </p>
+	     [% ELSE %]
+	     	<p><a href="/tag?id=[% row.id %]" rel="facybox">添加标签</a> </p>
+	     [% END %]
+
 	     <p class="btn pull-right">
 	       <a href="[% row.url %]" target=_blank>去购物</a>
 	     </p>
            </div>
 	   <div id="[% row.id %]" style="height:200px; width:280px;"></div>
-      	   <div class="code prettyprint">
-<!--
-	   <pre class="code prettyprint brush: js"></pre>
--->
-           </div>
       </div>
 
   [% IF i == 4 %]
     </div>
   [% i = 0; END; %]
 [% END %]
+
 
 [% INCLUDE page.tt %]
 [% END %]
