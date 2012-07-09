@@ -1,6 +1,22 @@
+<script type="text/javascript">
+/* for popup div */
+jQuery(document).ready(function($) {
+      $('a[rel*=facybox]').facybox({
+        // noAutoload: true
+      });
+      
+      $("h2",$("#changelog")).css("cursor","pointer").click(function(){
+          $(this).next().slideToggle('fast');
+      }).trigger("click");
+});
+</script>
+
+
+
      	  <div class="well">
      	  <p><img src="[% info.image_url %]"></p>
      	  <p>[% info.title %]</p>
 	  <p>￥<span class="price">[% info.price %]</span></p>
+       	  <p><a href="/tag?id=[% id %]" rel="facybox">添加标签</a></p>
 	  </div>
 

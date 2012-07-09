@@ -75,7 +75,7 @@ sub item : Chained("/") : PathPart Args(0) {
 	dt_updated => \"now()", #"
 	);
 
-    $c->stash(info => $info, template => "info.tt", no_wrapper => 1);
+    $c->stash(info => $info, template => "info.tt", id => $id, no_wrapper => 1);
 }
 
 sub tag : Chained("/") : PathPart Args(0) {
