@@ -99,7 +99,7 @@ $(document).ready(function(){
 	     	<p><a href="/tag?id=[% row.id %]" rel="facybox">添加标签</a> </p>
 	     [% END %]
 
-             <p><a href="#del" rel="facybox">删除</a> </p>
+             <p><a href="#[% row.id _ "del" %]" rel="facybox">删除</a> </p>
 
 	     <p class="btn pull-right">
 	       <a href="[% row.url %]" target=_blank>去购物</a>
@@ -108,7 +108,7 @@ $(document).ready(function(){
 	   <div id="[% row.id %]" style="height:200px; width:280px;"></div>
       </div>
 
-<div id="del" style="display:none;">
+<div id="[% row.id _ "del" %]" style="display:none;">
      <div style="height:20px;">
         <p><a href="/profile/del_item?id=[% row.id %]">确定</a> </p>     
      </div>
