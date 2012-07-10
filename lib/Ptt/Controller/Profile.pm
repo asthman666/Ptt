@@ -82,4 +82,22 @@ sub list_result : Chained("base") : PathPart : Args(0) {
     $c->stash(template => "list_result.tt", results => $results, tags => $tags);
 }
 
+sub del_item : Chained("base") : PathPart : Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $uid = $c->user->uid;
+    my $id = $c->req->params->{id};
+
+    $c->model("PttDB::UserItem")->search({uid => $uid, id => $id})->delete;
+    my $tag_rs = $c->model("PttDB::Tag")->search({uid => $uid});
+
+    while ( my $tag = $tag_rs->next ) {
+	my $tag_item_rs = $c->model("PttDB::TagItem")->search({tag_id => $tag->tag_id, id => $id});
+	$tag_item_rs->delete if $tag_item_rs;
+    }
+
+    $c->res->redirect($c->uri_for($c->controller('Profile')->action_for('list_result')));
+    $c->detach();
+}
+
 1;
