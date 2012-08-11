@@ -42,7 +42,14 @@ sub list_result : Chained("base") : PathPart : Args(0) {
     }
 
     while ( my $item = $items_rs->next ) {
-	my $item_price_rs = $item->item_price->search({}, {order_by => "dt_created desc"});
+	my $item_price_rs = $item->item_price->search({}, 
+						      { page => 1, 
+							rows => 10,
+							select   => [ 'id', 'dt_created', { min => 'price' } ],
+							as => [ 'id', 'dt_created', 'price' ],
+							group_by => [("date(dt_created)")],
+							order_by => "date(dt_created) desc",
+						      });
 	
 	my %hh = $item->get_columns;
 
@@ -51,25 +58,15 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 	    push @{$hh{tag}}, $tag->value;
 	}
 
-	my %seen;
-	my $i;
 	while ( my $item_price = $item_price_rs->next ) {
-	    $i++;
-	    if ( $i == 1 ) {
-		$hh{price} = $item_price->get_column('price');
-	    }
-
 	    my %p = $item_price->get_columns;
-	    
-	    $p{dt_created} =~ m{(\d{4}-\d\d-\d\d)};
-
-	    push @{$seen{"$1"}}, \%p;
+	    $p{dt_created} =~ s{\-}{\/}g;
+	    push @{$hh{$hh{id}}}, \%p;
 	}
 
-	foreach my $date ( keys %seen ) {
-	    @{$seen{$date}} = sort {$a->{price} <=> $b->{price}} @{$seen{$date}};
-	    $seen{$date}->[0]->{dt_created} = $date;
-	    push @{$hh{$hh{id}}}, $seen{$date}->[0];
+	if ( $hh{$hh{id}} ) {
+	    $hh{price} = $hh{$hh{id}}->[0]->{price};
+	    @{$hh{$hh{id}}} = sort { $a->{dt_created} cmp $b->{dt_created} } @{$hh{$hh{id}}};
 	}
 
 	$Template::Stash::PRIVATE = undef;
