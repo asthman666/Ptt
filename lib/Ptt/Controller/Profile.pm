@@ -74,7 +74,7 @@ sub list_result : Chained("base") : PathPart : Args(0) {
 
 	$Template::Stash::PRIVATE = undef;
 
-	next if @{$hh{$hh{id}}} < 2;  # FIXME: why need to add this, because jqPlot when x-axis have only one value, will cause some wrong!!!
+	#next if @{$hh{$hh{id}}} < 2;  # FIXME: why need to add this, because jqPlot when x-axis have only one value, will cause some wrong!!!
 
 	push @$results, \%hh;
     }

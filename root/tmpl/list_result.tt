@@ -1,9 +1,4 @@
-<script type="text/javascript" src="/static/js/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="/static/js/plugins/jqplot.highlighter.min.js"></script>
-<script type="text/javascript" src="/static/js/plugins/jqplot.cursor.min.js"></script>
-<script type="text/javascript" src="/static/js/plugins/jqplot.dateAxisRenderer.min.js"></script>
-
- <script type="text/javascript">
+<script type="text/javascript">
     jQuery(document).ready(function($) {
       $('a[rel*=facybox]').facybox({
         // noAutoload: true
@@ -14,54 +9,47 @@
       }).trigger("click");
       
     });
-  </script>
+</script>
 
 <script type="text/javascript">
-$(document).ready(function(){
-  [% FOREACH row IN results %]
-     [% id = row.id %]
+[% i = 0 %]
+[% FOREACH row IN results %]
+   [% id = row.id %]
+   [% i = i + 1 %]
+   var p_date_[% i %] = new Array();
+   var price_[% i %] = new Array();
 
-     var line1 = new Array();
+   [% FOREACH p IN row.$id %]
+      p_date_[% i %].push('[% p.dt_created %]');
+      price_[% i %].push([% p.price %]);
+   [% END %]
 
-     [% FOREACH p IN row.$id %]
-     	var sm = new Array();
-	sm.push('[% p.dt_created %]');
-	sm.push([% p.price %]);
-	line1.push(sm);
-     [% END %]
 
-     var x_num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %];
-     var y_num_ticks = [% row.$id.size > 4 ? 4 : row.$id.size %];
-
-     var plot1 = $.jqplot('[% id %]', [line1], {
-         title:'价格走势',
-         axes:{
-           xaxis:{
-	   numberTicks: x_num_ticks,
-           renderer:$.jqplot.DateAxisRenderer,
-           tickOptions:{
-              formatString:'%#m.%#d'
-           }
-           },
-           yaxis:{
-	   numberTicks: y_num_ticks,
-           tickOptions:{
-              formatString:'￥%.2f'
-           }
-           }
+   var pchart;
+   $(document).ready(function() {
+      pchart = new Highcharts.Chart({
+         chart: {
+            renderTo: '[% id %]',
+            type: 'line'
          },
-
-         highlighter: {
-            show: true,
-            sizeAdjust: 7.5
+         title: {
+            text: '价格趋势'
          },
-         cursor: {
-            show: false
-         }
-     });
-  [% END %]
+         xAxis: {
+            categories: p_date_[% i %]
+         },
+         yAxis: {
+            title: {
+               text: ''
+            }
+         },
+         series: [{
+            data: price_[% i %]
+         }]
+      });
+   });
 
-});
+[% END %]
 </script>
 
 [% INCLUDE profile_nav.tt %]
@@ -81,12 +69,8 @@ $(document).ready(function(){
 <div style="clear:both;"></div>
 
 [% IF results.size %]
-[% i = 0 %]
-[% FOREACH row IN results; 
-   i = i + 1; %]
-  [% IF i == 1 %]
+[% FOREACH row IN results %]
     <div class="row">
-  [% END %]
       <div class="span3">
       	   <div class="well">
 	     <img src="[% row.image_url %]" width=220 height=220>
@@ -105,21 +89,21 @@ $(document).ready(function(){
 	       <a href="[% row.url %]" target=_blank>去购物</a>
 	     </p>
            </div>
-	   <div id="[% row.id %]" style="height:200px; width:280px;"></div>
       </div>
 
-<div id="[% row.id _ "del" %]" style="display:none;">
-     <div style="height:20px;">
-        <p><a href="/profile/del_item?id=[% row.id %]">确定</a> </p>     
-     </div>
-</div>
+      <div class="span9">
+            <div id="[% row.id %]"></div>
+      </div>
 
-  [% IF i == 4 %]
+      <div id="[% row.id _ "del" %]" style="display:none;">
+           <div style="height:20px;">
+	       <p><a href="/profile/del_item?id=[% row.id %]">确定</a> </p>     
+           </div>
+      </div>
+
     </div>
-  [% i = 0; END; %]
 [% END %]
 
 
 [% INCLUDE page.tt %]
 [% END %]
-
