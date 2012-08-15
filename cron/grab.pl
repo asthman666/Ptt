@@ -42,7 +42,7 @@ while ( my $item = $rs->next ) {
     sub {
 	my ( $body, $hdr ) = @_;
 	print $hdr->{Status}, "\n";
-	my $object = $store_loader->get_object(1);
+	my $object = $store_loader->get_object($item->store_id);
 
 	my $header = HTTP::Headers->new('Content-Encoding' => "gzip, deflate");
 	my $mess = HTTP::Message->new( $header, $body );

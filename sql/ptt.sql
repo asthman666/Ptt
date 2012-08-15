@@ -109,13 +109,15 @@ drop table if exists item;
 create table item (
        id           char(22) binary default '' not null,
 
-       active        enum('y', 'n') default 'y' not null,
+       active       enum('y', 'n') default 'y' not null,
        dt_created   datetime default '0000-00-00 00:00:00' not null,
        dt_updated   datetime default '0000-00-00 00:00:00' not null,
 
        title  	    varchar(255)    default '' not null,
        image_url    varchar(255)    default '' not null,
        url          varchar(1024)   default '' not null,
+
+       store_id     int unsigned    default 0  not null,
        primary key (id)
 ) engine=innodb;
 
@@ -164,4 +166,21 @@ create table tag_item (
        dt_updated   datetime default '0000-00-00 00:00:00' not null,
 
        primary key (tag_id,id)
+) engine=innodb;
+
+drop table if exists store;
+create table store (
+       store_id     int unsigned auto_increment,
+
+       active       enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
+       store_name   varchar(255) default '' not null,
+       domain       varchar(255) default '' not null,
+       id_regex     varchar(128) default '' not null,
+       url_format   varchar(1024) default '' not null,       		    
+
+       primary key (store_id),
+       unique key (domain)
 ) engine=innodb;

@@ -29,6 +29,8 @@ requires 'XML::Simple';
 requires 'MooseX::MarkAsMethods';
 requires 'MooseX::NonMoose';
 requires 'DBIx::Class::Schema::Loader';
+requires 'Domain::PublicSuffix';
+requires 'Image::OCR::Tesseract';
 
 test_requires 'Test::More' => '0.88';
 catalyst;

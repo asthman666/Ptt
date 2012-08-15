@@ -7,6 +7,10 @@ BEGIN {extends 'Catalyst::Controller'; }
 use Amazon;
 use Digest::MD5 qw(md5_base64);
 use Data::Dumper;
+use Domain::PublicSuffix;
+use URI;
+use Crawler::StoreLoader;
+use UA;
 
 sub item : Chained("/") : PathPart Args(0) {
     my ( $self, $c ) =@_;
@@ -17,41 +21,73 @@ sub item : Chained("/") : PathPart Args(0) {
 	return;
     }
 
+    $c->stash(template => "info.tt", no_wrapper => 1);
+    
     my $q = $c->req->params->{q};
 
-    my $asin;
-    if ( $q =~ m{(B0[\w+]{8})} ) {
-	$asin = $1;
-    }
-    return unless $asin;
+    my $uri = URI->new($q);
+    my $host = $uri->host;
 
-    my $aws = Amazon->new(
-	access_key    => $c->config->{aws_access_key},
-	secret_key    => $c->config->{aws_secret_key},
-	associate_tag => $c->config->{aws_associate_tag},
-	);
-
-    my $request = {
-	Operation => 'ItemLookup',
-	IdType => 'ASIN',
-	ItemId => $asin,
-	ResponseGroup => 'ItemAttributes,Offers,Images,Reviews',
-    };
+    my $suffix = Domain::PublicSuffix->new( {'data_file' => $c->path_to('conf', 'effective_tld_names.dat')} );
     
-    my $ref = $aws->ref($request);
-    return unless $ref;
+    my $domain = $suffix->get_root_domain($host);
 
-    my $h = $ref->{Items}->[0]->{Item};
-    return unless $h;
+    my $store = $c->model('PttDB::Store')->search({domain => $domain})->single;
+    my $store_id = $store->store_id;
 
-    my $info;
-    $info->{title} = $h->{ItemAttributes}->{Title};
-    $info->{image_url} = $h->{LargeImage}->{URL};
-    $info->{price} = sprintf("%.2f", $h->{OfferSummary}->{LowestNewPrice}->{Amount}/100);
-    my $url = "http://www.amazon.cn/dp/$asin";
-    my $id = md5_base64($url);
+    my ($sid, $id, $info, $url);
+
+    my $id_regex = $store->id_regex;
+    $q =~ m{$id_regex};
+    $sid = $1;
+    return unless $sid;
+    
+    my $url_format = $store->url_format;
+    ($url = $url_format) =~ s{_ID_}{$sid};
+    $id = md5_base64($url);
     $id =~ s{/}{-}g;
     $id =~ s{\+}{_}g;
+
+    if ( $store_id == 1 ) {
+	my $aws = Amazon->new(
+	    access_key    => $c->config->{aws_access_key},
+	    secret_key    => $c->config->{aws_secret_key},
+	    associate_tag => $c->config->{aws_associate_tag},
+	    );
+
+	my $request = {
+	    Operation => 'ItemLookup',
+	    IdType => 'ASIN',
+	    ItemId => $sid,
+	    ResponseGroup => 'ItemAttributes,Offers,Images,Reviews',
+	};
+	
+	my $ref = $aws->ref($request);
+	return unless $ref;
+
+	my $h = $ref->{Items}->[0]->{Item};
+	return unless $h;
+
+	$info->{title} = $h->{ItemAttributes}->{Title};
+	$info->{image_url} = $h->{LargeImage}->{URL};
+	$info->{price} = sprintf("%.2f", $h->{OfferSummary}->{LowestNewPrice}->{Amount}/100);
+    } else {
+	my $store_loader = Crawler::StoreLoader->new();
+	
+	$c->log->debug("get store_id $store_id");
+
+	my $obj = $store_loader->get_object($store_id);
+
+	
+	$c->log->debug("get url format: $url");
+
+	my $ua = UA->new;
+	my $resp = $ua->get($q);
+	my $body = $resp->decoded_content;
+	
+	my $results = $obj->parse($body);
+	$info = $results->[0];
+    }
 
     $c->model('PttDB::Item')->update_or_create(
 	id        => $id,
@@ -60,6 +96,7 @@ sub item : Chained("/") : PathPart Args(0) {
 	dt_created => \"now()", #"
 	dt_updated => \"now()", #"
 	url       => $url,
+	store_id  => $store_id,
 	);
 
     $c->model('PttDB::ItemPrice')->create({
@@ -75,7 +112,7 @@ sub item : Chained("/") : PathPart Args(0) {
 	dt_updated => \"now()", #"
 	);
 
-    $c->stash(info => $info, template => "info.tt", id => $id, no_wrapper => 1);
+    $c->stash(info => $info, id => $id);
 }
 
 sub tag : Chained("/") : PathPart Args(0) {
