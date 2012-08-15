@@ -51,7 +51,16 @@ while ( my $item = $rs->next ) {
 	my $results = $object->parse($output);
 
 	foreach ( @$results ) {
-	    next if $_->{availability} eq 'out of stock';
+	    if ($_->{availability} && $_->{availability} eq 'out of stock') {
+		print "item id: " . $item->id . ", out of stock";
+		next;
+	    }
+
+	    unless ( $_->{price} ) {
+		print "item id: " . $item->id . ", no price";
+		next;
+	    }
+
 	    $_->{price} =~ s{,}{}g;
 	    $schema->resultset('ItemPrice')->create({id => $item->id,
 						     dt_created => \"now()",  #"

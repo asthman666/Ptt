@@ -19,7 +19,7 @@ sub parse {
 	$h{price} = $1;
     }
 
-    if ( $body =~ m{目前无货} ) {
+    if ( $body =~ m{目前无货} || $body =~ m{缺货登记} ) {
 	$h{availability} = "out of stock";
     } else {
 	$h{availability} = "in stock";
