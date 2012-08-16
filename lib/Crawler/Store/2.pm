@@ -24,10 +24,15 @@ sub parse {
     }
 
     if ( $body =~ m{<strong class="price"><img.*?src ="(.*?)"/>} ) {
-	my $resp = $self->{ua}->save($1, "/tmp/jd.png");
-	my $text = get_ocr("/tmp/jd.png");
+	my $image_url = $1;
+	$image_url =~ m{.+/(.+\.png)};
+	my $image_file = $1;
+	#print $image_file, "\n";
+	my $resp = $self->{ua}->save($image_url, "/tmp/$image_file");
+	my $text = get_ocr("/tmp/$image_file");
 	$text =~ m{([\d.]+)};
 	$h{price} = $1;
+	unlink "/tmp/$image_file";
     }
 
     return [\%h];
