@@ -10,6 +10,7 @@ use HTTP::Message;
 use HTTP::Headers;
 use Ptt;
 use Data::Dumper;
+use Debug;
 
 binmode STDOUT, ":encoding(UTF-8)";
 
@@ -32,7 +33,7 @@ my $store_loader = Crawler::StoreLoader->new();
 my $cv = AnyEvent->condvar;
 
 while ( my $item = $rs->next ) {
-    print $item->url, "\n";
+    debug $item->url;
     $cv->begin;
 
     http_get $item->url,
@@ -41,7 +42,7 @@ while ( my $item = $rs->next ) {
     },
     sub {
 	my ( $body, $hdr ) = @_;
-	print $hdr->{Status}, "\n";
+	debug $hdr->{Status};
 	my $object = $store_loader->get_object($item->store_id);
 
 	my $header = HTTP::Headers->new('Content-Encoding' => "gzip, deflate");
@@ -52,12 +53,12 @@ while ( my $item = $rs->next ) {
 
 	foreach ( @$results ) {
 	    if ($_->{availability} && $_->{availability} eq 'out of stock') {
-		print "item id: " . $item->id . ", out of stock";
+		debug "item id: " . $item->id . ", out of stock";
 		next;
 	    }
 
 	    unless ( $_->{price} ) {
-		print "item id: " . $item->id . ", no price";
+		debug "item id: " . $item->id . ", no price";
 		next;
 	    }
 
