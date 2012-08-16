@@ -1,5 +1,6 @@
 package UA;
 use LWP::UserAgent;
+use Debug;
 
 sub new {
     my $class = shift;
@@ -20,7 +21,8 @@ sub save {
     my $self = shift;
     my $from_file = shift;
     my $to_file = shift;
-    $self->{ua}->get($from_file, ':content_file' =>  $to_file);
+    my $resp = $self->{ua}->get($from_file, ':content_file' =>  $to_file);
+    debug("download $from_file to $to_file down, status: " . $resp->status_line);
 }
 
 sub get {

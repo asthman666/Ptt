@@ -9,10 +9,14 @@ use AnyEvent::HTTP;
 use HTTP::Message;
 use HTTP::Headers;
 use Ptt;
+use Getopt::Long;
 use Data::Dumper;
 use Debug;
 
 binmode STDOUT, ":encoding(UTF-8)";
+
+my $store_id;
+GetOptions ("store_id=i" => \$store_id);
 
 my $connect_info = Ptt->config->{"Model::PttDB"}->{connect_info};
 my $dsn      = delete $connect_info->{dsn};
@@ -26,7 +30,11 @@ my $schema = Ptt::Schema->connect(
     $connect_info,
 );
 
-my $rs = $schema->resultset('Item')->search({});
+my %cond;
+$cond{store_id} = $store_id if $store_id;
+$cond{active} = 'y';
+
+my $rs = $schema->resultset('Item')->search(\%cond);
 
 my $store_loader = Crawler::StoreLoader->new();
 

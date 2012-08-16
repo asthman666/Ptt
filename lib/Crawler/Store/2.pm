@@ -1,7 +1,7 @@
 package Crawler::Store::2;
 use base qw(Crawler::Store);
 use Image::OCR::Tesseract 'get_ocr';
-use UA;
+use Debug;
 
 sub new {
     my $class = shift;
@@ -28,11 +28,20 @@ sub parse {
 	$image_url =~ m{.+/(.+\.png)};
 	my $image_file = $1;
 	#print $image_file, "\n";
-	my $resp = $self->{ua}->save($image_url, "/tmp/$image_file");
+
+	my $time = time;
+	$image_file = $time . "_" . $image_file;
+
+	$self->{ua}->save($image_url, "/tmp/$image_file");
+	$ua->save($image_url, "/tmp/$image_file");
+
 	my $text = get_ocr("/tmp/$image_file");
 	$text =~ m{([\d.]+)};
 	$h{price} = $1;
-	unlink "/tmp/$image_file";
+
+	debug("get price $h{price}");
+
+	#unlink "/tmp/$image_file";
     }
 
     return [\%h];
