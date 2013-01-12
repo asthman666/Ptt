@@ -1,56 +1,22 @@
-<!--
-[% IF facet.size %]
-<div class="facet">
-    <ul class="facet-ul">
-        [% FOREACH f IN facet %]
-	    <li class="facet-li"><a href="[% c.req.uri_with({cid => f.category_id}) %]">[% f.name %]</a></li>
-	[% END %]
-    </ul>	
-    <div class="facet-clear"></div>
-    <div class="showmore">
-        <a href="#"><span>显示全部品牌</span></a>
-    </div>
-</div>
-[% END %]
-
-[% IF cd_cid.keys.size %]
-<div id="tbbc">
-     <a href="[% cd_cid.rlink %]" class="close_btn">X</a>
-     <span class="std">[% cd_cid.name %]</span>
-</div>
-[% END %]
--->
-
 <table class="table">
     <tbody>
     [% index = 0 %]
     [% FOREACH row IN results %]
         <tr>
-            <td width=10%><img src="[% row.pic_small_url %]"></td>
+            <td width=10%><img src="[% row.image_url %]"></td>
 	    <td width=35%>
 	        <table>
-		    <tr><td><a target=_blank href="[% row.click_url || row.detail_url %]">[% row.title %]</a></td></tr>
-		    [% IF row.volume %]<tr><td>最近成交<span class="volume">[% row.volume %]</span>笔</td></tr>[% END %]
-		    <tr><td>[% row.nick %] [% IF row.score %]<img src="/static/images/s[% row.score %].gif">[% END %]</td></tr>
+		    <tr><td><a target=_blank href="[% row.url %]">[% row.title %]</a></td></tr>
 		</table>
             </td>
             <td width=15%>
 	        <table>
 		    <tr><td>￥<span class="price">[% row.price %]</span></td></tr>
-		    <tr><td>[% row.item_location %]</td></tr>
 		</table>
-            </td>
-            <td width=25%>
-	        [% IF row.commission_rate && 0 %]
-	        <table>
-		    <tr><td><span class="commission_rate">返利 [% row.commission_rate %]</span></td></tr>
-		    <tr><td>可省￥[% row.commission %]</td></tr>
-		</table>
-		[% END %]
             </td>
             <td width=15%>
                 <p class="btn pull-right">
-                  <a href="[% row.click_url || row.detail_url %]" target=_blank>去购物</a>
+                  <a href="[% row.url %]" target=_blank>去购物</a>
                 </p>
             </td>
         </tr>
@@ -61,4 +27,5 @@
 [% IF page.data_page.first_page != page.data_page.last_page %]
    [% INCLUDE page.tt %]
 [% END %]
+
 
