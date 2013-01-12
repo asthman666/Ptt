@@ -5,7 +5,7 @@ APP_PATH=$BHOME/src/$APP_NAME
 APP_USER=$BSER
 FCGI_TCP_CONNECTION=127.0.0.1:8100
 PID_PATH=/var/run/$APP_NAME.prod.pid
-NPROC=3
+NPROC=2
 
 case $1 in
 start)

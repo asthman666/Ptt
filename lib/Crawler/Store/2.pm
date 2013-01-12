@@ -33,7 +33,7 @@ sub parse {
 	$image_file = $time . "_" . $image_file;
 
 	$self->{ua}->save($image_url, "/tmp/$image_file");
-	$ua->save($image_url, "/tmp/$image_file");
+	#$ua->save($image_url, "/tmp/$image_file");
 
 	my $text = get_ocr("/tmp/$image_file");
 	$text =~ m{([\d.]+)};
