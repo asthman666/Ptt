@@ -136,8 +136,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-08-12 11:57:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hTMl+ZCiaEfOb1pYmOQ+nQ
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VL9F+tNlYotCzUSS/o34+g
 
 __PACKAGE__->has_many(user_item => 'Ptt::Schema::Result::UserItem', 'id');
 __PACKAGE__->has_many(item_price => 'Ptt::Schema::Result::ItemPrice', 'id');

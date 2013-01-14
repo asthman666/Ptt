@@ -184,3 +184,18 @@ create table store (
        primary key (store_id),
        unique key (domain)
 ) engine=innodb;
+
+drop table if exists site;
+create table site (
+       site_id     int unsigned auto_increment,
+
+       active       enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
+       site_name    varchar(255) default '' not null,
+       domain       varchar(255) default '' not null,
+
+       primary key (site_id),
+       unique key (domain)
+) engine=innodb;

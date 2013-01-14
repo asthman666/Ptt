@@ -150,8 +150,8 @@ __PACKAGE__->set_primary_key("store_id");
 __PACKAGE__->add_unique_constraint("domain", ["domain"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-08-14 21:50:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5Iu4y7Yco4s1nIE9FOMpMg
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q185eR00Mm8oQUqEQoBC3w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

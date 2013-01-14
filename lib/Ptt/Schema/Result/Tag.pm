@@ -139,8 +139,8 @@ __PACKAGE__->set_primary_key("tag_id");
 __PACKAGE__->add_unique_constraint("uid", ["uid", "value"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-07-07 10:50:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o7RBCl6f8XHJXYpxQb0GyQ
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bqZlW9jn+iroctXvC+4/vQ
 
 __PACKAGE__->has_many(tag_item => 'Ptt::Schema::Result::TagItem', 'tag_id');
 __PACKAGE__->many_to_many(items => 'tag_item', 'item');

@@ -1,12 +1,12 @@
 use utf8;
-package Ptt::Schema::Result::Cid;
+package Ptt::Schema::Result::Site;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Ptt::Schema::Result::Cid
+Ptt::Schema::Result::Site
 
 =cut
 
@@ -18,19 +18,19 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<cid>
+=head1 TABLE: C<site>
 
 =cut
 
-__PACKAGE__->table("cid");
+__PACKAGE__->table("site");
 
 =head1 ACCESSORS
 
-=head2 cid
+=head2 site_id
 
   data_type: 'integer'
-  default_value: 0
   extra: {unsigned => 1}
+  is_auto_increment: 1
   is_nullable: 0
 
 =head2 active
@@ -54,48 +54,28 @@ __PACKAGE__->table("cid");
   default_value: '0000-00-00 00:00:00'
   is_nullable: 0
 
-=head2 name
+=head2 site_name
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
   size: 255
 
-=head2 parent_cid
-
-  data_type: 'integer'
-  default_value: 0
-  extra: {unsigned => 1}
-  is_nullable: 0
-
-=head2 cid_tree
+=head2 domain
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
   size: 255
-
-=head2 is_leaf
-
-  data_type: 'enum'
-  default_value: 'n'
-  extra: {list => ["y","n"]}
-  is_nullable: 0
-
-=head2 level
-
-  data_type: 'smallint'
-  default_value: 0
-  is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
-  "cid",
+  "site_id",
   {
     data_type => "integer",
-    default_value => 0,
     extra => { unsigned => 1 },
+    is_auto_increment => 1,
     is_nullable => 0,
   },
   "active",
@@ -119,43 +99,41 @@ __PACKAGE__->add_columns(
     default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
   },
-  "name",
+  "site_name",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
-  "parent_cid",
-  {
-    data_type => "integer",
-    default_value => 0,
-    extra => { unsigned => 1 },
-    is_nullable => 0,
-  },
-  "cid_tree",
+  "domain",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
-  "is_leaf",
-  {
-    data_type => "enum",
-    default_value => "n",
-    extra => { list => ["y", "n"] },
-    is_nullable => 0,
-  },
-  "level",
-  { data_type => "smallint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</cid>
+=item * L</site_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("cid");
+__PACKAGE__->set_primary_key("site_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<domain>
+
+=over 4
+
+=item * L</domain>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("domain", ["domain"]);
 
 
 # Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ow6GzzZHSiN8IXXrydm1Lw
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l96tx2Nk2NJ3CDk/DRHLyw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

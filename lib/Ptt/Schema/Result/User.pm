@@ -51,7 +51,7 @@ __PACKAGE__->table("user");
 
   data_type: 'enum'
   default_value: 'active'
-  extra: {list => ["active","suspended"]}
+  extra: {list => ["active","paused"]}
   is_nullable: 0
 
 =head2 user_name
@@ -103,7 +103,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "active",
-    extra => { list => ["active", "suspended"] },
+    extra => { list => ["active", "paused"] },
     is_nullable => 0,
   },
   "user_name",
@@ -153,8 +153,8 @@ __PACKAGE__->add_unique_constraint("email", ["email"]);
 __PACKAGE__->add_unique_constraint("user_name", ["user_name"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-05-10 22:03:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YB+XWF1JzDVsQV/jN9ds3Q
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YREvGXUrhaKQKMCA30o7VA
 
 __PACKAGE__->has_many(user_item => 'Ptt::Schema::Result::UserItem', 'uid');
 __PACKAGE__->many_to_many(items => 'user_item', 'item');

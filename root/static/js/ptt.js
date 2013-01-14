@@ -7,3 +7,11 @@ $(function() {
     }
     );
 });
+
+$(function() {
+    $("#q").click(function() {
+	$("#q").val("");
+    }
+    );
+});
+

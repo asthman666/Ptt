@@ -45,20 +45,13 @@ sub request {
     my $req = $self->cv;
     http_request $method ? $method
         : 'get' => $self->api . $path,
-        headers    => { 'Content-type' => 'application/json' },
         persistent => 1,
         sub {
             my ( $data, $headers ) = @_;
-            my $content_type = $headers->{'content-type'} || '';
+	    my $json = eval { decode_json($data) };
+	    $req->send( $@ ? $self->raw_api_response($data) : $json );
+    };
 
-            #if ( $content_type =~ /^application\/json/ ) {
-            if ( 1 ) {
-                my $json = eval { decode_json($data) };
-                $req->send( $@ ? $self->raw_api_response($data) : $json );
-            } else {
-                $req->send( $self->raw_api_response($data) );
-            }
-       };
     return $req;
 }
 

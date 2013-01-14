@@ -69,8 +69,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-06-18 22:05:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:37dwjBYE8caBCp/XH+kKHw
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OXzpgj4bO3DT9S13bcOBpQ
 
 __PACKAGE__->belongs_to(item => 'Ptt::Schema::Result::Item', 'id');
 

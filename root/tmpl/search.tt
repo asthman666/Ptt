@@ -1,9 +1,18 @@
-<table class="table">
+<table class="table" border=1>
     <tbody>
+    <tr><td>标题</td>
+	<td>[% IF c.req.params.sort && c.req.params.sort == 'price' %]
+	       <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格从高到低</a>
+	    [% ELSE %]
+	       <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格从低到高</a>
+	    [% END %]
+	</td>
+	<td>商家</td><td></td>
+    </tr>
     [% index = 0 %]
-    [% FOREACH row IN results %]
+    [% FOREACH row IN results; %]
+       [% site_id = row.site_id %]
         <tr>
-            <td width=10%><img src="[% row.image_url %]"></td>
 	    <td width=35%>
 	        <table>
 		    <tr><td><a target=_blank href="[% row.url %]">[% row.title %]</a></td></tr>
@@ -12,6 +21,11 @@
             <td width=15%>
 	        <table>
 		    <tr><td>￥<span class="price">[% row.price %]</span></td></tr>
+		</table>
+            </td>
+            <td width=15%>
+	        <table>
+		    <tr><td>[% site_seen.$site_id %]</td></tr>
 		</table>
             </td>
             <td width=15%>

@@ -111,8 +111,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("tag_id", "id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2012-06-27 22:28:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F8/NN5zjtRJ6RVNWOWa3lw
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5ZG80o9UOaiO0bPRYbGvPg
 
 __PACKAGE__->belongs_to(tag => 'Ptt::Schema::Result::Tag', 'tag_id');
 __PACKAGE__->belongs_to(item => 'Ptt::Schema::Result::Item', 'id');
