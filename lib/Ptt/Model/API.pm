@@ -8,14 +8,13 @@ use Encode ();
 use JSON;
 use Try::Tiny 0.09;
 use AnyEvent::HTTP qw(http_request);
+use Debug;
 use namespace::autoclean;
 
 {
     no warnings 'once';
     $AnyEvent::HTTP::PERSISTENT_TIMEOUT = 0;
-    $AnyEvent::HTTP::USERAGENT
-        = 'Mozilla/5.0 (compatible; U; MetaCPAN-Web/1.0; '
-        . '+https://github.com/CPAN-API/metacpan-web)';
+    $AnyEvent::HTTP::USERAGENT = 'Ptt/Spider';
 }
 
 sub cv {
@@ -35,8 +34,8 @@ sub COMPONENT {
 
 sub model {
     my ( $self, $model ) = @_;
-    return MetaCPAN::Web->model('API') unless $model;
-    return MetaCPAN::Web->model("API::$model");
+    return Ptt->model('API') unless $model;
+    return Ptt->model("API::$model");
 }
 
 sub request {
@@ -45,9 +44,12 @@ sub request {
     my $req = $self->cv;
     http_request $method ? $method
         : 'get' => $self->api . $path,
-        persistent => 1,
+        persistent => 0,
         sub {
             my ( $data, $headers ) = @_;
+	    if ( $headers->{Status} ne '200' ) {
+		debug("get Status $headers->{Status} for URL $headers->{URL}, Reason: $headers->{Reason}");
+	    }
 	    my $json = eval { decode_json($data) };
 	    $req->send( $@ ? $self->raw_api_response($data) : $json );
     };

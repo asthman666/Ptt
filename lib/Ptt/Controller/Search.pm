@@ -6,6 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 use Data::Page;
 use Page;
+use Debug;
 
 sub search : Chained("/") : PathPart("search") : Args(0) {
     my ( $self, $c ) = @_;
@@ -13,10 +14,9 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my $q    = $c->req->params->{q};
     my $sort = $c->req->params->{sort};
 
-    my $p = $c->req->params->{p} || 1;
+    debug("param q: $q");
 
-    #$c->log->debug("get q: $q");
-    #$c->log->debug("get sort: $sort");
+    my $p = $c->req->params->{p} || 1;
 
     my $data = $c->model("API::Search")->search($q, $sort)->recv;
 

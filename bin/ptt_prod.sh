@@ -5,7 +5,7 @@ APP_PATH=$BHOME/src/$APP_NAME
 APP_USER=$BSER
 FCGI_TCP_CONNECTION=127.0.0.1:8100
 PID_PATH=/var/run/$APP_NAME.prod.pid
-NPROC=2
+NPROC=1
 
 case $1 in
 start)
@@ -25,7 +25,7 @@ start)
        --listen $FCGI_TCP_CONNECTION\\
        --pidfile \"$PID_PATH\"\\
        --nproc $NPROC\\
-       --keeperr 2 &" "$APP_USER"
+       --keeperr >> /var/log/ptt/error.log 2>&1 &" "$APP_USER"
 
     # Wait for the app to start  
     TIMEOUT=10; while [ ! -r "$PID_PATH" ] && ! kill -0 $(cat "$PID_PATH")

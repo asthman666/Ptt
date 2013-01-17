@@ -17,7 +17,7 @@ sub debug {
     my @subinfo = caller(1);
 
     if ( $msg ) {
-        my $time = strftime("%D %T", localtime());
+        my $time = strftime("%F %T", localtime());
         my $out_str = "[$time]: $$ " . $subinfo[3] . ": $msg\n";
         print $DEBUG_FH $out_str;
     }
