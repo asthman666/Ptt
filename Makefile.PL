@@ -31,6 +31,7 @@ requires 'MooseX::NonMoose';
 requires 'DBIx::Class::Schema::Loader';
 requires 'Domain::PublicSuffix';
 requires 'Image::OCR::Tesseract';
+requires 'Business::ISBN';
 
 test_requires 'Test::More' => '0.88';
 catalyst;

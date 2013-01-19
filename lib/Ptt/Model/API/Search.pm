@@ -5,21 +5,31 @@ use URI::Escape;
 use namespace::autoclean;
 
 sub search {
-    my ( $self, $q, $sort ) = @_;
+    my ( $self, $qh, $sort ) = @_;
 
-    my %qh;
+    my %assistant;
 
     if ( $sort ) {
 	if ( $sort eq "-price" ) {
-	    $qh{sort} = "price desc";
+	    $assistant{sort} = "price desc";
 	} elsif ( $sort eq "price" ) {
-	    $qh{sort} = "price asc";
+	    $assistant{sort} = "price asc";
 	}
     }
 
-    my $path = "/solr/collection1/select?q=ean:$q&wt=json";
-    foreach my $k ( keys %qh ) {
-	$path .= "&$k=" . uri_escape($qh{$k});
+    my $path;
+    if ( $qh->{ean} ) {
+	$path = "/solr/collection1/select?q=ean:$qh->{ean}&wt=json";
+    } elsif ( $qh->{k} ) {
+	$path = "/solr/collection1/select?q=title:" . uri_escape_utf8($qh->{k}) . "&wt=json";
+    }
+
+    if ( $qh->{p} ) {
+	$path .= "&rows=10&start=" . (10*($qh->{p}-1));
+    }
+
+    foreach my $k ( keys %assistant ) {
+	$path .= "&$k=" . uri_escape($assistant{$k});
     }
 
     $self->request($path);

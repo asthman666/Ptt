@@ -10,7 +10,9 @@ $(function() {
 
 $(function() {
     $("#q").click(function() {
-	$("#q").val("");
+	if ( $("#q").attr("value") == "输入图书的ISBN号码" ) {
+	    $("#q").val("");
+	}
     }
     );
 });

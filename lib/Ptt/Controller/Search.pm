@@ -12,13 +12,16 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my ( $self, $c ) = @_;
 
     my $q    = $c->req->params->{q};
-    my $sort = $c->req->params->{sort};
+    my $sort = $c->req->params->{sort} || "price";
 
     debug("param q: $q");
 
-    my $p = $c->req->params->{p} || 1;
+    my $qh = $c->model('Analysis::Query')->parse_q($q);
 
-    my $data = $c->model("API::Search")->search($q, $sort)->recv;
+    my $p = $c->req->params->{p} || 1;
+    $qh->{p} = $p;
+
+    my $data = $c->model("API::Search")->search($qh, $sort)->recv;
 
     my $total_results = $data->{response}->{numFound};
     my $results = $data->{response}->{docs};
@@ -26,6 +29,9 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my %site_seen;
     if ( $results ) {
 	foreach my $item ( @$results ) {
+	    if ( $item->{price} ) {
+		$item->{price} = sprintf("%.2f", $item->{price});
+	    }
 	    $site_seen{$item->{site_id}}++;
 	}
     }

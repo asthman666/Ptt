@@ -11,6 +11,8 @@ $VERSION = 1.00;
 $DEBUG_FH ||= *STDERR;
 $|++;
 
+binmode($DEBUG_FH, ":encoding(utf8)");
+
 sub debug {
     my $msg = shift;
 
