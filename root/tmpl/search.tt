@@ -20,7 +20,13 @@
             </td>
             <td width=15%>
 	        <table>
-		    <tr><td>￥<span class="price">[% row.price %]</span></td></tr>
+		    <tr><td>
+		    [% IF row.available == 'out of stock' %]
+		       缺货		       		    
+		    [% ELSIF row.price && row.price != '0.00' %]
+       		       ￥<span class="price">[% row.price %]</span>
+		    [% END %]
+		    </td></tr>
 		</table>
             </td>
             <td width=15%>
