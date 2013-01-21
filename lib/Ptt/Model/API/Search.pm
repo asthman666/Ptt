@@ -26,8 +26,8 @@ sub search {
 	$path = "/solr/collection1/select?q=title:" . uri_escape_utf8($qh->{k}) . "&wt=json&q.op=AND";
     }
 
-    if ( $qh->{p} ) {
-	$path .= "&rows=10&start=" . (10*($qh->{p}-1));
+    if ( $qh->{p} && $qh->{page_size} ) {
+	$path .= "&rows=$qh->{page_size}&start=" . ($qh->{page_size}*($qh->{p}-1));
     }
 
     foreach my $k ( keys %assistant ) {
