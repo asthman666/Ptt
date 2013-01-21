@@ -1,3 +1,13 @@
+[% IF total_results %]
+<div class="row">
+    <span class="span12">
+    <ul class="nav nav-pills well well-small">
+    共 [% total_results %] 条
+    </ul>
+    </span>
+</div>
+[% END %]
+
 <table class="table" border=1>
     <tbody>
     <tr><td>标题</td>

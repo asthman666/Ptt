@@ -18,7 +18,9 @@ sub search {
     }
 
     my $path;
-    if ( $qh->{ean} ) {
+    if ( $qh->{site_id} ) {
+       $path = "/solr/collection1/select?q=site_id:$qh->{site_id}&wt=json";
+    } elsif ( $qh->{ean} ) {
 	$path = "/solr/collection1/select?q=ean:$qh->{ean}&wt=json";
     } elsif ( $qh->{k} ) {
 	$path = "/solr/collection1/select?q=title:" . uri_escape_utf8($qh->{k}) . "&wt=json&q.op=AND";

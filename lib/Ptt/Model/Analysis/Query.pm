@@ -25,6 +25,8 @@ sub parse_q {
 	if ( valid_isbn_checksum($q) ) {
 	    $qh->{ean} = $q;
 	}
+    } elsif ( $q =~ m{site_id:\s*(\d+)} ) {
+        $qh->{site_id} = $1;
     } else {
 	$qh->{k} = $q;
     }
