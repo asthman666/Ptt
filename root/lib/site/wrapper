@@ -28,7 +28,7 @@
 
   <span class="span7">
     <form class="form-search ptt_mt" action="/search">  
-      <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q || '输入图书的ISBN号码' %]" name="q" id="q">  
+      <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q || '输入图书的ISBN号码或手机型号' %]" name="q" id="q">  
       <button type="submit" class="btn">Search</button>  
     </form>  
   </span>
