@@ -26,6 +26,13 @@ sub search {
 	$path = "/solr/collection1/select?q=title:" . uri_escape_utf8($qh->{k}) . "&wt=json&q.op=AND";
     }
 
+    if ( $qh->{p1} || $qh->{p2} ) {
+        my $p1 = $qh->{p1} || "*";
+        my $p2 = $qh->{p2} || "*";
+        my $pr = "price:[$p1 TO $p2]";
+        $path .= "&fq=" . uri_escape($pr);
+    }
+
     if ( $qh->{p} && $qh->{page_size} ) {
 	$path .= "&rows=$qh->{page_size}&start=" . ($qh->{page_size}*($qh->{p}-1));
     }

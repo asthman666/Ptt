@@ -6,6 +6,22 @@
     </ul>
     </span>
 </div>
+
+<div class="row">
+    <span class="span12">
+    <ul class="nav nav-pills well well-small">
+        <li>
+        <form class="navbar-form">
+          价格范围: 
+          <input type="hidden" value="[% c.req.params.q %]" name="q">
+          <input type="text" class="ptt_span1" value="[% c.req.params.p1 %]" name="p1" id="p1"> - 
+          <input type="text" class="ptt_span1" value="[% c.req.params.p2 %]" name="p2" id="p2">  
+          <input type="submit" class="btn" value="走">
+        </form>
+        </li>
+    </ul>
+    </span>
+</div>
 [% END %]
 
 <table class="table" border=1>

@@ -21,6 +21,8 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my $p = $c->req->params->{p} || 1;
     $qh->{p} = $p;
     $qh->{page_size} = $c->config->{page_size};
+    $qh->{p1} = $c->req->params->{p1};
+    $qh->{p2} = $c->req->params->{p2};
 
     my $data = $c->model("API::Search")->search($qh, $sort)->recv;
 
