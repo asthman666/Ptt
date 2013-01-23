@@ -9,6 +9,7 @@ use Data::Page;
 use Page;
 use Debug;
 use Date::Calc;
+use URI::Escape;
 
 sub search : Chained("/") : PathPart("search") : Args(0) {
     my ( $self, $c ) = @_;
@@ -40,6 +41,9 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	    if ( $item->{price} ) {
 		$item->{price} = sprintf("%.2f", $item->{price});
 	    }
+
+            $item->{url} = "/t?site_id=$item->{site_id}&to=" . uri_escape($item->{url});
+
 	    $site_seen{$item->{site_id}}++;
             if ( my $dt_created = $item->{dt_created} ) {
                 my ( $y1, $m1, $d1, $hh1, $mm1, $ss1 ) = ($dt_created =~ m{(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z});

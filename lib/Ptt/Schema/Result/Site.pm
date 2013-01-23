@@ -68,6 +68,13 @@ __PACKAGE__->table("site");
   is_nullable: 0
   size: 255
 
+=head2 track_url
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 1024
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -103,6 +110,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "domain",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
+  "track_url",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 1024 },
 );
 
 =head1 PRIMARY KEY
@@ -132,8 +141,8 @@ __PACKAGE__->set_primary_key("site_id");
 __PACKAGE__->add_unique_constraint("domain", ["domain"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-01-12 21:50:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l96tx2Nk2NJ3CDk/DRHLyw
+# Created by DBIx::Class::Schema::Loader v0.07017 @ 2013-01-23 16:04:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tKJiUtcOpAfGS+NGF6c6fw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
