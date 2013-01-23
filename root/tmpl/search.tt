@@ -47,10 +47,8 @@
             <td width=15%>
 	        <table>
 		    <tr><td>
-		    [% IF row.available == 'out of stock' %]
-		       缺货		       		    
-		    [% ELSIF row.price && row.price != '0.00' %]
-       		       ￥<span class="price">[% row.price %]</span>
+		    [% IF row.price && row.price != '0.00' %]
+       		       ￥<span class="price">[% row.price %]</span> [% IF row.available == 'out of stock' %](缺货)[% END %]
 		    [% END %]
 		    </td></tr>
 		</table>
