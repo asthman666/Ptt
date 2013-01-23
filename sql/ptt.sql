@@ -195,6 +195,7 @@ create table site (
 
        site_name    varchar(255) default '' not null,
        domain       varchar(255) default '' not null,
+       track_url    varchar(1024) default '' not null,
 
        primary key (site_id),
        unique key (domain)
