@@ -32,6 +32,7 @@ requires 'DBIx::Class::Schema::Loader';
 requires 'Domain::PublicSuffix';
 requires 'Image::OCR::Tesseract';
 requires 'Business::ISBN';
+requires 'Date::Calc';
 
 test_requires 'Test::More' => '0.88';
 catalyst;

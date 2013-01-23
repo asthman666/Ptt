@@ -33,7 +33,7 @@
 	       <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格从低到高</a>
 	    [% END %]
 	</td>
-	<td>商家</td><td></td>
+	<td>商家</td><td>更新</td><td></td>
     </tr>
     [% index = 0 %]
     [% FOREACH row IN results; %]
@@ -53,9 +53,14 @@
 		    </td></tr>
 		</table>
             </td>
-            <td width=15%>
+            <td width=7%>
 	        <table>
 		    <tr><td>[% site_seen.$site_id %]</td></tr>
+		</table>
+            </td>
+            <td width=8%>
+	        <table>
+		    <tr><td>[% row.dt_delta %]</td></tr>
 		</table>
             </td>
             <td width=15%>

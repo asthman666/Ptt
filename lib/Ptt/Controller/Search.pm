@@ -4,9 +4,11 @@ use namespace::autoclean;
 
 BEGIN {extends 'Catalyst::Controller'; }
 
+use utf8;
 use Data::Page;
 use Page;
 use Debug;
+use Date::Calc;
 
 sub search : Chained("/") : PathPart("search") : Args(0) {
     my ( $self, $c ) = @_;
@@ -29,6 +31,9 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my $total_results = $data->{response}->{numFound};
     my $results = $data->{response}->{docs};
 
+    my @now = localtime;
+    my ( $y2, $m2, $d2, $hh2, $mm2, $ss2 ) = ($now[5]+1900, $now[4]+1, $now[3], $now[2], $now[1], $now[0]);
+
     my %site_seen;
     if ( $results ) {
 	foreach my $item ( @$results ) {
@@ -36,6 +41,36 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 		$item->{price} = sprintf("%.2f", $item->{price});
 	    }
 	    $site_seen{$item->{site_id}}++;
+            if ( my $dt_created = $item->{dt_created} ) {
+                my ( $y1, $m1, $d1, $hh1, $mm1, $ss1 ) = ($dt_created =~ m{(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z});
+                $hh1 =~ s{^0+}{};
+                my @deltas = Date::Calc::N_Delta_YMDHMS( $y1, $m1, $d1, $hh1, $mm1, $ss1, $y2, $m2, $d2, $hh2, $mm2, $ss2 );
+                my $i = 0;
+                foreach ( @deltas ) {
+                    if ( $_ ) {
+                        if ( $i == 0 ) {
+                            $item->{dt_delta} = $_ . "年前";
+                            last;
+                        } elsif ( $i == 1 ) {
+                            $item->{dt_delta} = $_ . "月前";
+                            last;
+                        } elsif ( $i == 2 ) {
+                            $item->{dt_delta} = $_ . "天前";
+                            last;
+                        } elsif ( $i == 3 ) {
+                            $item->{dt_delta} = $_ . "小时前";
+                            last;
+                        } elsif ( $i == 4 ) {
+                            $item->{dt_delta} = $_ . "分钟前";
+                            last;
+                        } elsif ( $i == 5 ) {
+                            $item->{dt_delta} = $_ . "秒前";
+                            last;
+                        }
+                    }
+                    $i++;
+                }
+            }
 	}
     }
      
