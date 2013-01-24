@@ -1,0 +1,38 @@
+.price {
+    color: #FF0000;
+    font-family: tahoma;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.ptt_span0 {
+  width: 30px;
+}
+
+.ptt_span1 {
+  width: 40px;
+}
+
+.ptt_mt {
+    margin-top: 20px;
+}
+
+.ptt_mb {
+    margin-top:10px;
+    margin-bottom: 20px;
+}
+
+.ptt_span2 {
+    margin-left: 140px;
+}
+
+.ptt_offset0 {
+    margin-left: 50px;
+}
+
+.logo {
+    padding-left:517px;
+    width:136px;
+    margin-left:0px;
+};
+

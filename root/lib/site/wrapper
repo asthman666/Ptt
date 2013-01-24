@@ -16,7 +16,7 @@
 <link href="/static/css/facybox_urls.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
-<link rel="stylesheet" type="text/css" href="/static/css/site.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ptt.css">
 </head>
 <body>
 <div class="container">
