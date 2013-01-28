@@ -68,6 +68,10 @@ __PACKAGE__->config(
         cookie_expires => 0,   # session cookie, which will die when the user's browser is shut down.
     },
 
+    'View::JSON' => {
+	expose_stash => ['init_q'],
+    },
+
     'View::TT' => {
 	INCLUDE_PATH => [
 	    __PACKAGE__->path_to( 'root', 'tmpl' ),

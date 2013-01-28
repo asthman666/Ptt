@@ -7,13 +7,3 @@ $(function() {
     }
     );
 });
-
-$(function() {
-    $("#q").click(function() {
-	if ( $("#q").attr("value") == "输入图书的ISBN号码或手机型号" ) {
-	    $("#q").val("");
-	}
-    }
-    );
-});
-

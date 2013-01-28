@@ -5,7 +5,7 @@
 <title>[% IF title %][% title %] | [% END %]葡萄淘,不错哦 - 比价</title>
 <meta name="description" content="比价-[% title %]">
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="/static/js/ptt.js"></script>
+<script type="text/javascript" src="/static/js/init_q.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/ptt.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
@@ -22,8 +22,9 @@
 
 <div class="ptt_mb">  
   <span class="span7 ptt_mb" style="padding-left:260px;">
-    <form class="form-search ptt_mt" action="/search">  
-      <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% c.req.params.q || '输入图书的ISBN号码或手机型号' %]" name="q" id="q">  
+    <form id="isearch" class="form-search ptt_mt" action="/search">  
+      <input type="text" class="input-xxlarge search-query" autocomplete="off" name="q" id="q">  
+      <span id="cq"></span>
       <button type="submit" class="btn">Search</button>  
     </form>  
   </span>

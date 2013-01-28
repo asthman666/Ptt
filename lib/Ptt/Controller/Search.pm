@@ -92,6 +92,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	      total_results => $total_results, 
 	      page => $page, 
 	      site_seen => \%site_seen,
+	      qh => $qh,
 	      template => 'search.tt', 
         );
 }

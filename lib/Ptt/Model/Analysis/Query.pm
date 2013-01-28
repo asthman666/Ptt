@@ -1,9 +1,10 @@
 package Ptt::Model::Analysis::Query;
 use Moose;
-extends 'Catalyst::Model';
+use utf8;
 use Business::ISBN qw( valid_isbn_checksum );
 use namespace::autoclean;
 use Debug;
+extends 'Catalyst::Model';
 
 sub parse_q {
     my $self = shift;
@@ -12,6 +13,7 @@ sub parse_q {
     
     my $qh;
 
+    $q =~ s{输入手机型号, 例如:}{};
     $q =~ s{^\s+}{};
     $q =~ s{\s+$}{};
     $q =~ s{\s{2,}}{ }g;
