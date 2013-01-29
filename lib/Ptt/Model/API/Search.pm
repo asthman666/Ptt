@@ -23,7 +23,7 @@ sub search {
     } elsif ( $qh->{ean} ) {
 	$path = "/solr/collection1/select?q=ean:$qh->{ean}&wt=json";
     } elsif ( $qh->{k} ) {
-	$path = "/solr/collection1/select?q=title:" . uri_escape_utf8($qh->{k}) . "&wt=json&q.op=AND";
+	$path = "/solr/collection1/select?q=title:(" . uri_escape_utf8($qh->{k}) . ")&wt=json&q.op=AND";
     }
 
     if ( $qh->{p1} || $qh->{p2} ) {
