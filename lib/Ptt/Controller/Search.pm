@@ -27,6 +27,17 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     $qh->{p1} = $c->req->params->{p1};
     $qh->{p2} = $c->req->params->{p2};
 
+    # NOTE: stock is 0, include: all
+    #       stock is 1, only include: in stock
+    #       stock is 2, only include: out of stock
+    #       stock is 3, only include: pre order
+
+    if ( defined $c->req->params->{stock} && $c->req->params->{stock} ne '' ) {
+	$qh->{stock} = $c->req->params->{stock};
+    } else {
+	$qh->{stock} = 1;
+    }
+    
     my $data = $c->model("API::Search")->search($qh, $sort)->recv;
 
     my $total_results = $data->{response}->{numFound};

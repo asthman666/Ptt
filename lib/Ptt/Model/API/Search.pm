@@ -33,6 +33,19 @@ sub search {
         $path .= "&fq=" . uri_escape($pr);
     }
 
+    my $stock;
+    if ( $qh->{stock} == 1 ) {
+	$stock = 'available:"in stock"';
+    } elsif ( $qh->{stock} == 2 ) {
+	$stock = 'available:"out of stock"';
+    } elsif ( $qh->{stock} == 3 ) {
+	$stock = 'available:"pre order"';
+    }
+    
+    if ( $stock ) {
+	$path .= "&fq=" . uri_escape($stock);
+    }
+
     if ( $qh->{p} && $qh->{page_size} ) {
 	$path .= "&rows=$qh->{page_size}&start=" . ($qh->{page_size}*($qh->{p}-1));
     }

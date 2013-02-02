@@ -34,6 +34,7 @@ requires 'Image::OCR::Tesseract';
 requires 'Business::ISBN';
 requires 'Date::Calc';
 requires 'Catalyst::Helper::View::JSON';
+requires 'AnyEvent::HTTP';
 
 test_requires 'Test::More' => '0.88';
 catalyst;
