@@ -1,6 +1,4 @@
-<div class="row">
-<span class="span10 offset4">
-<div class="pagination">
+<div class="pagination pull-right">
   <ul>
     [% IF page.data_page.previous_page %]
       [% params.p = page.data_page.previous_page %]
@@ -22,6 +20,4 @@
       <li class="next"><a href="[% c.req.uri_with({ p => page.data_page.next_page }) %]">下一页</a></li>
     [% END %]
   </ul>
-</div>
-</span>
 </div>
