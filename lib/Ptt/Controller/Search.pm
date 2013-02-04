@@ -15,7 +15,6 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     my ( $self, $c ) = @_;
 
     my $q    = $c->req->params->{q};
-    my $sort = $c->req->params->{sort} || "price";
 
     debug("param q: $q");
 
@@ -26,6 +25,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     $qh->{page_size} = $c->config->{page_size};
     $qh->{p1} = $c->req->params->{p1};
     $qh->{p2} = $c->req->params->{p2};
+    $qh->{sort} = $c->req->params->{sort} || "price";
 
     # NOTE: stock is 0, include: all
     #       stock is 1, only include: in stock
@@ -38,7 +38,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	$qh->{stock} = 1;
     }
     
-    my $data = $c->model("API::Search")->search($qh, $sort)->recv;
+    my $data = $c->model("API::Search")->search($qh)->recv;
 
     my $total_results = $data->{response}->{numFound};
     my $results = $data->{response}->{docs};

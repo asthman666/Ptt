@@ -24,29 +24,27 @@
 </div>
 [% END %]
 
-<table class="table" border=1>
-    <tbody>
-    <tr><td>标题</td>
-	<td>[% IF c.req.params.sort && c.req.params.sort == 'price' %]
-	       <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格从高到低</a>
+<table class="table table-hover">
+    <thead>
+    <tr><th>标题</th>
+	<th>[% IF qh.sort && qh.sort == 'price' %]
+	       <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格从低到高</a>
 	    [% ELSE %]
-	       <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格从低到高</a>
+	       <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格从高到低</a>
 	    [% END %]
-	</td>
-	<td>商家</td><td>更新</td><td></td>
+	</th>
+	<th>商家</td><th>更新</th><th></th>
     </tr>
+    </thead>
+    <tbody>
     [% index = 0 %]
     [% FOREACH row IN results; %]
        [% site_id = row.site_id %]
         <tr>
-	    <td width=35%>
-	        <table>
-		    <tr><td><a target=_blank href="[% row.url %]">[% row.title %]</a></td></tr>
-		</table>
+	    <td width=40%>
+                <a target=_blank href="[% row.url %]">[% row.title %]</a>
             </td>
-            <td width=15%>
-	        <table>
-		    <tr><td>
+            <td width=10%>
 		    [% IF row.price && row.price != '0.00' %]
        		       ￥<span class="price">[% row.price %]</span>
 		    [% END %]
@@ -55,21 +53,15 @@
 		    [% ELSIF row.available == 'pre order' %]
 			(可预订)
 		    [% END %]
-		    </td></tr>
-		</table>
             </td>
             <td width=7%>
-	        <table>
-		    <tr><td>[% site_seen.$site_id %]</td></tr>
-		</table>
+	        [% site_seen.$site_id %]
             </td>
             <td width=8%>
-	        <table>
-		    <tr><td>[% row.dt_delta %]</td></tr>
-		</table>
+		[% row.dt_delta %]
             </td>
             <td width=15%>
-                <p class="btn pull-right">
+                <p class="btn btn-link pull-right">
                   <a href="[% row.url %]" target=_blank>去购物</a>
                 </p>
             </td>
@@ -81,5 +73,6 @@
 [% IF page.data_page.first_page != page.data_page.last_page %]
    [% INCLUDE page.tt %]
 [% END %]
+
 
 

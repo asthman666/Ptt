@@ -5,14 +5,14 @@ use URI::Escape;
 use namespace::autoclean;
 
 sub search {
-    my ( $self, $qh, $sort ) = @_;
+    my ( $self, $qh ) = @_;
 
     my %assistant;
 
-    if ( $sort ) {
-	if ( $sort eq "-price" ) {
+    if ( $qh->{sort} ) {
+	if ( $qh->{sort} eq "-price" ) {
 	    $assistant{sort} = "price desc";
-	} elsif ( $sort eq "price" ) {
+	} elsif ( $qh->{sort} eq "price" ) {
 	    $assistant{sort} = "price asc";
 	}
     }
