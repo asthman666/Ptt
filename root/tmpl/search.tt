@@ -61,9 +61,7 @@
 		[% row.dt_delta %]
             </td>
             <td width=15%>
-                <p class="btn btn-link pull-right">
-                  <a href="[% row.url %]" target=_blank>去购物</a>
-                </p>
+		<a class="btn btn-small pull-right" href="[% row.url %]" target=_blank><i class="icon-hand-right"></i> 购买</a>
             </td>
         </tr>
     [% END %]
