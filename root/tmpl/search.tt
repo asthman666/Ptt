@@ -27,13 +27,32 @@
 <table class="table table-hover">
     <thead>
     <tr><th>标题</th>
-	<th>[% IF qh.sort && qh.sort == 'price' %]
-	       <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格从低到高</a>
-	    [% ELSE %]
-	       <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格从高到低</a>
-	    [% END %]
+	<th>[% IF qh.sort %]
+                [% IF qh.sort == 'price' %]
+        	    <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格 <i class="icon-arrow-up"></i></a>
+    	        [% ELSIF qh.sort == '-price' %]
+    	            <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格 <i class="icon-arrow-down"></i></a>
+                [% ELSE %]
+                    <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格</a>
+    	        [% END %]
+            [% ELSE %]
+                <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格</a>
+            [% END %]
 	</th>
-	<th>商家</td><th>更新</th><th></th>
+	<th>商家</th>
+	<th>[% IF qh.sort %]
+                [% IF qh.sort == 'update' %]
+        	    <a href=[% c.req.uri_with({ sort => '-update' }) %]>更新 <i class="icon-arrow-up"></i></a>
+    	        [% ELSIF qh.sort == '-update' %]
+    	            <a href=[% c.req.uri_with({ sort => 'update' }) %]>更新 <i class="icon-arrow-down"></i></a>
+    	        [% ELSE %]
+                    <a href=[% c.req.uri_with({ sort => 'update' }) %]>更新</a>
+                [% END %]
+            [% ELSE %]
+                <a href=[% c.req.uri_with({ sort => 'update' }) %]>更新</a>
+            [% END %]
+        </th>
+        <th></th>
     </tr>
     </thead>
     <tbody>

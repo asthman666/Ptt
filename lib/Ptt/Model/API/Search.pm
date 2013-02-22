@@ -14,6 +14,10 @@ sub search {
 	    $assistant{sort} = "price desc";
 	} elsif ( $qh->{sort} eq "price" ) {
 	    $assistant{sort} = "price asc";
+        } elsif ( $qh->{sort} eq "update" ) {
+            $assistant{sort} = "dt_created asc";
+        } elsif ( $qh->{sort} eq "-update" ) {
+            $assistant{sort} = "dt_created desc";
 	}
     }
 
