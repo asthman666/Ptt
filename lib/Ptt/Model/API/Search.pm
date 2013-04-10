@@ -27,7 +27,8 @@ sub search {
     } elsif ( $qh->{ean} ) {
 	$path = "/solr/collection1/select?q=ean:$qh->{ean}&wt=json";
     } elsif ( $qh->{k} ) {
-	$path = "/solr/collection1/select?q=title:(" . uri_escape_utf8($qh->{k}) . ")&wt=json&q.op=AND";
+	my $k = $self->q_escape($qh->{k});
+	$path = "/solr/collection1/select?q=title:(" . uri_escape_utf8($k) . ")&wt=json&q.op=AND";
     }
 
     if ( $qh->{p1} || $qh->{p2} ) {
@@ -59,6 +60,12 @@ sub search {
     }
 
     $self->request($path);
+}
+
+sub q_escape {
+    my ( $self, $text ) = @_;
+    $text =~ s{([-/+!(){}\[\]^"~*?:\\])}{\\$1}g;
+    return $text;
 }
 
 __PACKAGE__->meta->make_immutable;
