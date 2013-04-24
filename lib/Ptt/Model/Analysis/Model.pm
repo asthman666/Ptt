@@ -15,7 +15,7 @@ sub is_model {
     if ( $model =~ m{^[-a-zA-Z0-9+/]+$} ) {
         return 0 if $model =~ m{^\d+$};
         return 0 if $model =~ m{^[a-zA-Z]+$};
-        return 0 if $model =~ m{\d+(g|gb|ml)}i;
+        return 0 if $model =~ m{^\d+(g|gb|ml)$}i;
         return 0 if $model !~ m{\d};
 
         if ( my $num = () = $model =~ m{\+}g ) {
