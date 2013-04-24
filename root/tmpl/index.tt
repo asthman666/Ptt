@@ -31,5 +31,16 @@
 </div>
 
 </div>
+
+
+<!-- begine footer -->
+<div id="footer">
+  <div class="span7 ptt_mb" style="padding-left:360px;">
+    <p><a href="/sitemap">网站地图</a></p>
+  </div>
+</div>
+<!-- end footer -->
+</div>
+
 </body>
 </html>

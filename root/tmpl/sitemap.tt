@@ -1,0 +1,9 @@
+<html>
+<body>
+<ul>
+[% FOREACH row IN results %]
+    <li><a href="/search?q=[% row.value %]">[% row.value %]</a></li>
+[% END %]
+</ul>
+</body>
+</html>

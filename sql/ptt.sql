@@ -215,3 +215,13 @@ create table init_q (
        unique key (value)
 ) engine=innodb;
 
+drop table if exists model;
+create table model (
+    model_id        int unsigned     auto_increment,
+    dt_created      datetime         default '0000-00-00 00:00:00' not null,
+    active          enum('y', 'n')   default 'y' not null, 
+    dt_updated      datetime         default '0000-00-00 00:00:00' not null,
+    value           varchar(255)     default '' not null,
+    primary key (model_id),
+    unique key value (value)
+) engine=myisam;

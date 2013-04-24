@@ -19,6 +19,13 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     debug("param q: $q");
 
     my $qh = $c->model('Analysis::Query')->parse_q($q);
+    
+    if ( $qh->{k} ) {
+	if ( $c->model('Analysis::Model')->is_model($qh->{k}) ) {
+	    my $now = "now()";
+	    $c->model('PttDB::Model')->find_or_create({dt_created => \$now, dt_updated => \$now, value => $qh->{k}}, {key => 'value'});
+	}
+    }
 
     my $p = $c->req->params->{p} || 1;
     $qh->{p} = $p;
