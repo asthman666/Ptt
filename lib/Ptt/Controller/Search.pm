@@ -44,6 +44,8 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     } else {
 	$qh->{stock} = 1;
     }
+
+    $c->model('ImmediateSearch')->search($qh);
     
     my $data = $c->model("API::Search")->search($qh)->recv;
 

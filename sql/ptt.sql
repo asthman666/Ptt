@@ -201,6 +201,19 @@ create table site (
        unique key (domain)
 ) engine=innodb;
 
+drop table if exists site_url_generate;
+create table site_url_generate (
+       site_id      int unsigned    default 0 not null,
+
+       active       enum('y', 'n') default 'y' not null,
+       dt_created   datetime default '0000-00-00 00:00:00' not null,
+       dt_updated   datetime default '0000-00-00 00:00:00' not null,
+
+       url          varchar(1024) default '' not null,
+       primary key (site_id)
+) engine=innodb;
+
+
 drop table if exists init_q;
 create table init_q (
        q_id     int unsigned auto_increment,
