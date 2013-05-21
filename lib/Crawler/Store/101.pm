@@ -1,4 +1,4 @@
-package Crawler::Store::102;
+package Crawler::Store::101;
 use base qw(Crawler::Store);
 use HTML::TreeBuilder;
 use Debug;
@@ -22,17 +22,18 @@ sub parse {
     my $content = shift;
     return unless $content;
 
-    if ( $url =~ m{keyword=} ) {
+    if ( $url =~ m{key=} ) {
         # need to find url
 	my $time = time;
         my $tree = HTML::TreeBuilder->new_from_content($content);
-        if ( my $div = $tree->look_down('id', 'plist') ) {
-            my $item_url = $div->look_down('class', 'p-name')->look_down(_tag => 'a')->attr('href');
+        if ( my $li = $tree->look_down(_tag => 'li', class => qr/line\d+/) ) {
+            my $item_url = $li->look_down(_tag => 'p', class => 'name')->look_down(_tag => 'a')->attr('href');
+            $item_url =~ s{#.+}{};
             $self->add_url({site_id => $self->{site_id}, url => $item_url});
         }
 	$tree->delete;
 	debug("find url cost: " . (time - $time));
-    } elsif ( $url =~ m{(\d+)\.html} ) {
+    } elsif ( $url =~ m{product\.aspx\?product_id=(\d+)} ) {
         # need to find item info
         my %h;
 
@@ -43,15 +44,10 @@ sub parse {
             $h{title} = $1;
         }
 
-        my $price_url = "http://jprice.jd.com/price/np" . $h{sku} . "-TRANSACTION-J.html";
-        my $resp = $self->{ua}->get($price_url);
-        my $content = $resp->content;
-        if ( $content =~ m{jdPrice":{(.*?)}}i ){
-            if( $1 =~ m{amount":(.*?),}i ){
-                $h{price} = $1;
-            }
+        if ( $content =~ m{<span class="yen">&yen;</span>(.+?)</b>} ) {
+            $h{price} = $1;
         }
-
+        
         $h{site_id} = $self->{site_id};
         $h{id} = $h{sku} . "-" . $h{site_id};
         

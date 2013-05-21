@@ -9,8 +9,6 @@ use HTTP::Headers;
 use HTTP::Message;
 use HTML::TreeBuilder;
 use Crawler::StoreLoader;
-use Digest::MD5 qw(md5_hex)
-use Time::HiRes qw(time);
 
 has 'store_loader' => (is => 'rw', lazy_build => 1);
 
@@ -31,74 +29,84 @@ sub _build_store_loader {
 
 sub search {
     my ( $self, $qh ) = @_;
-    if ( $qh->{ean} ) {
+    my @site_url_generates = Ptt->model('PttDB::SiteUrlGenerate')->search({active => 'y'});
 
-	my $time = time;
-	my $ean = $qh->{ean};
+    my $sem = Coro::Semaphore->new(30);
+    my @coros;
+    my @urls;
 
-	my @site_url_generates = Ptt->model('PttDB::SiteUrlGenerate')->search({active => 'y'});
-
-        my $sem = Coro::Semaphore->new(30);
-	my @coros;
-	my @urls;
-
-	my %site_ids;
-	foreach ( @site_url_generates ) {
-	    my $key = $time."~".$ean."~".$_->site_id;
-	    $key = md5_hex($key);
-	    
-	    Ptt->model('Redis')->execute('set', $key => 1);;
-	    
-	    my $url = $_->url;
-	    $url =~ s{_KEYWORD_}{$qh->{ean}}g;
-	    push @urls, $url;
-	    $site_ids{$_->site_id}++;
-	}
-
-	while (1) {
-	    while ( my $url = shift @urls ) {
-		my $site_id = 102;
-
-		push @coros,
-		async {
-		    my $guard = $sem->guard;
-
-		    http_get $url,
-		    headers => $self->headers,
-		    Coro::rouse_cb;
-
-		    my ($body, $hdr) = Coro::rouse_wait;
-		    debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
-
-		    my $header = HTTP::Headers->new('content-encoding' => 'gzip, deflate', 'content-type' => 'text/html');
-		    my $mess = HTTP::Message->new( $header, $body );
-		    if ( my $content = $mess->decoded_content() ) {
-			my $sku_tree = HTML::TreeBuilder->new_from_content($content);
-			if ( my $div = $sku_tree->look_down('id', 'plist') ) {
-			    my $item_url = $div->look_down('class', 'p-name')->look_down(_tag => 'a')->attr('href');
-			    push @urls, $item_url;
-			}
-
-			my $object = $self->store_loader->get_object($site_id);
-			my $results = $object->parse($content);
-			debug Dumper $results;
-		    }
-		    
-		    
-
-		    if ($hdr->{URL} =~ m{\d+\.html}) {
-			delete $site_ids{102};
-		    }
-		}
-	    }
-
-	    $_->join foreach ( @coros );
-	    
-	    last unless keys %site_ids;
-	}
+    my %site_id2charset;
+    my %site_ids;
+    foreach ( @site_url_generates ) {
+	my $u;
+        (my $url = $_->url) =~ s{_KEYWORD_}{$qh->{ean}}g;
+	$u->{url} = $url;
+	$u->{site_id} = $_->site_id;
+        push @urls, $u;
+        $site_ids{$_->site_id}++;
+	$site_id2charset{$_->site_id} = $_->charset;
     }
+
+    my @results;
+    while (1) {
+        while ( my $u = shift @urls ) {
+	    my $url = $u->{url};
+	    my $site_id = $u->{site_id};
+	    
+            push @coros,
+            async {
+                my $guard = $sem->guard;
+
+                http_get $url,
+                headers => $self->headers,
+                Coro::rouse_cb;
+
+                my ($body, $hdr) = Coro::rouse_wait;
+                debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
+
+                my $header = HTTP::Headers->new('content-encoding' => 'gzip, deflate', 'content-type' => 'text/html');
+                #my $header = HTTP::Headers->new('content-type' => 'text/html');
+                my $mess = HTTP::Message->new( $header, $body );
+		
+		my $content;
+		if ( my $charset = $site_id2charset{$site_id} ) {
+		    $content = $mess->decoded_content(charset => $charset);
+		} else {
+		    $content = $mess->decoded_content();
+		}
+
+                my $object = $self->store_loader->get_object($site_id);
+
+                $object->parse($url, $content);
+                if ( $object->{url} && @{$object->{url}} ) {
+                    push @urls, @{$object->clean_url};
+                }
+
+                if ( $object->{item} && @{$object->{item}} ) {
+                    # need to return items
+                    return @{$object->clean_item};
+                }
+            }
+        }
+
+        foreach ( @coros ) {
+            if ( $_->join ) {
+                push @results, $_->join;
+            }
+        }
+
+        foreach my $h ( @results ) {
+            delete $site_ids{$h->{site_id}};
+        }
+
+        last unless keys %site_ids;
+    }
+    
+    #debug Dumper \@results;
+    return \@results;
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
+

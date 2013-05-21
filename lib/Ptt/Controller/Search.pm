@@ -45,12 +45,15 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 	$qh->{stock} = 1;
     }
 
-    $c->model('ImmediateSearch')->search($qh);
-    
-    my $data = $c->model("API::Search")->search($qh)->recv;
-
-    my $total_results = $data->{response}->{numFound};
-    my $results = $data->{response}->{docs};
+    my ( $total_results, $results );
+    if ( $qh->{ean} ) {
+        $results = $c->model('ImmediateSearch')->search($qh);
+        $total_results = @$results;
+    } else {
+        my $data = $c->model("API::Search")->search($qh)->recv;
+        $total_results = $data->{response}->{numFound};
+        $results = $data->{response}->{docs};
+    }
 
     my @now = localtime;
     my ( $y2, $m2, $d2, $hh2, $mm2, $ss2 ) = ($now[5]+1900, $now[4]+1, $now[3], $now[2], $now[1], $now[0]);
@@ -120,4 +123,5 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
 

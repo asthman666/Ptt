@@ -61,6 +61,13 @@ __PACKAGE__->table("site_url_generate");
   is_nullable: 0
   size: 1024
 
+=head2 charset
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 128
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -94,6 +101,8 @@ __PACKAGE__->add_columns(
   },
   "url",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 1024 },
+  "charset",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 128 },
 );
 
 =head1 PRIMARY KEY
@@ -109,8 +118,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("site_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-05-19 09:05:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u4TizSwJOXG6sYKU3plqOQ
+# Created by DBIx::Class::Schema::Loader v0.07024 @ 2013-05-21 21:11:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wzse8mL+0C5R+xINEA9+ow
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

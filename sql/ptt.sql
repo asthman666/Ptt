@@ -210,6 +210,7 @@ create table site_url_generate (
        dt_updated   datetime default '0000-00-00 00:00:00' not null,
 
        url          varchar(1024) default '' not null,
+       charset      varchar(128)  default '' not null,
        primary key (site_id)
 ) engine=innodb;
 
