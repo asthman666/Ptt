@@ -34,6 +34,7 @@ sub parse {
 	debug("find url cost: " . (time - $time));
     } elsif ( $url =~ m{(\d+)\.html} ) {
         # need to find item info
+        my $time = time;
         my %h;
 
         $h{sku} = $1;
@@ -56,8 +57,10 @@ sub parse {
         $h{id} = $h{sku} . "-" . $h{site_id};
         
         $self->add_item(\%h);
+        debug("parse item cost: " . (time - $time));
     }
 }
 
 1;
+
 

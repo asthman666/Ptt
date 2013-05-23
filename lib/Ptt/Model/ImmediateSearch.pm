@@ -76,8 +76,12 @@ sub search {
 		}
 
                 my $object = $self->store_loader->get_object($site_id);
-
                 $object->parse($url, $content);
+
+                if ( !$object->{url} && !$object->{item} ) {
+                    return {site_id => $site_id, property => 'bum'};
+                }
+
                 if ( $object->{url} && @{$object->{url}} ) {
                     push @urls, @{$object->clean_url};
                 }
@@ -95,10 +99,14 @@ sub search {
             }
         }
 
-        foreach my $h ( @results ) {
+        for ( my $i=$#results; $i>=0; $i-- ) {
+            my $h = $results[$i];
             delete $site_ids{$h->{site_id}};
+            if ( $h->{property} && $h->{property} eq 'bum' ) {
+                splice(@results, $i, 1);
+            }
         }
-
+        
         last unless keys %site_ids;
     }
     
@@ -109,4 +117,5 @@ sub search {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
 

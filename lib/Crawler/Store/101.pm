@@ -34,6 +34,7 @@ sub parse {
 	$tree->delete;
 	debug("find url cost: " . (time - $time));
     } elsif ( $url =~ m{product\.aspx\?product_id=(\d+)} ) {
+        my $time = time;
         # need to find item info
         my %h;
 
@@ -52,8 +53,10 @@ sub parse {
         $h{id} = $h{sku} . "-" . $h{site_id};
         
         $self->add_item(\%h);
+        debug("parse item cost: " . (time - $time));
     }
 }
 
 1;
+
 
