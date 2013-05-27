@@ -1,4 +1,4 @@
-package Crawler::Store::101;
+package Crawler::Store::122;
 use base qw(Crawler::Store);
 use HTML::TreeBuilder;
 use Debug;
@@ -21,39 +21,46 @@ sub parse {
     my $url  = shift;
     my $content = shift;
     return unless $content;
-
-    if ( $url =~ m{key=} ) {
+    
+    if ( $url =~ m{search\.aspx} ) {
         # need to find url
 	my $time = time;
         my $tree = HTML::TreeBuilder->new_from_content($content);
-        if ( my $li = $tree->look_down(_tag => 'li', class => qr/line\d+/) ) {
-            my $item_url = $li->look_down(_tag => 'p', class => 'name')->look_down(_tag => 'a')->attr('href');
-            $item_url =~ s{#.+}{};
-            $self->add_url({site_id => $self->{site_id}, url => $item_url});
+        if ( my $div = $tree->look_down(class => 'mbd') ) {
+            if ( my $ul = $div->look_down(_tag => 'ul') ) {
+                if ( my $li = $ul->look_down(_tag => 'li') ) {
+                    if ( my $url = $li->look_down(_tag => 'a')->attr('href') ) {
+                        $self->add_url({site_id => $self->{site_id},url => $url});
+                    }
+                }
+            }
         }
 	$tree->delete;
 	debug("find url cost: " . (time - $time));
-    } elsif ( $url =~ m{product\.aspx\?product_id=(\d+)} ) {
-        my $time = time;
+    } elsif ( $url =~ m{wl\.cn/(\d+)} ) {
         # need to find item info
+        my $time = time;
         my %h;
 
         $h{sku} = $1;
         $h{url} = $url;
 
-        if ( $content =~ m{<h1>(.+?)<} ) {
-            $h{title} = $1;
-        }
+	my $sku_tree = HTML::TreeBuilder->new_from_content($content);
 
-        if ( $content =~ m{id="promo_price">&yen;(.+?)<} ) {
-	    $h{price} = $1;
-	} elsif ( $content =~ m{<span class="yen">&yen;</span>(.+?)</b>} ) {
-            $h{price} = $1;
+	if ( my $h1 = $sku_tree->look_down(_tag => 'h2') ) {
+	    $h{title} = $h1->as_trimmed_text;
+	}
+
+	if ( my $ul = $sku_tree->look_down('class', 'lh wl') ) {
+            $h{price} = $ul->as_trimmed_text;
         }
-        
+	$sku_tree->delete;
+
         $h{site_id} = $self->{site_id};
         $h{id} = $h{sku} . "-" . $h{site_id};
-        
+
+        $h{price} =~ s{[^\d,.]}{}g;
+
         $self->add_item(\%h);
         debug("parse item cost: " . (time - $time));
     }
