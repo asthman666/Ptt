@@ -115,6 +115,9 @@ sub search {
     }
     
     #debug Dumper \@results;
+    if ( $qh->{sort} eq 'price' ) {
+	@results = sort { $a->{price} <=> $b->{price} || $a->{site_id} <=> $b->{site_id} } @results;
+    }
     return \@results;
 }
 
