@@ -28,7 +28,7 @@ sub _build_store_loader {
 }
 
 sub search {
-    my ( $self, $qh ) = @_;
+    my ( $self, $qh, $filter ) = @_;
     my @site_url_generates = Ptt->model('PttDB::SiteUrlGenerate')->search({active => 'y'});
 
     my $sem = Coro::Semaphore->new(30);
@@ -38,6 +38,9 @@ sub search {
     my %site_id2charset;
     my %site_ids;
     foreach ( @site_url_generates ) {
+	if ($filter->{site_id}) {
+	    next if $_->site_id != $filter->{site_id};
+	}
 	my $u;
         (my $url = $_->url) =~ s{_KEYWORD_}{$qh->{ean}}g;
 	$u->{url} = $url;
@@ -62,9 +65,10 @@ sub search {
                 Coro::rouse_cb;
 
                 my ($body, $hdr) = Coro::rouse_wait;
-                debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
+                #debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
+		debug Dumper $hdr;
 
-                my $header = HTTP::Headers->new('content-encoding' => 'gzip, deflate', 'content-type' => 'text/html');
+                my $header = HTTP::Headers->new('content-encoding' => $hdr->{'content-encoding'}, 'content-type' => 'text/html');
                 #my $header = HTTP::Headers->new('content-type' => 'text/html');
                 my $mess = HTTP::Message->new( $header, $body );
 		
