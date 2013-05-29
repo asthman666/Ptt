@@ -239,3 +239,43 @@ create table model (
     primary key (model_id),
     unique key value (value)
 ) engine=myisam;
+
+drop table if exists property;
+create table property (
+    property_id     int unsigned     auto_increment,
+    dt_created      datetime         default '0000-00-00 00:00:00' not null,
+    active          enum('y', 'n')   default 'y' not null, 
+    dt_updated      datetime         default '0000-00-00 00:00:00' not null,
+    property_name   varchar(255)     default '' not null,
+    primary key (property_id)           
+) engine=innodb;
+
+drop table if exists product;
+create table product (
+    product_id        int unsigned     auto_increment,
+    
+    dt_created        datetime         default '0000-00-00 00:00:00' not null,
+    active            enum('y', 'n')   default 'y' not null, 
+    dt_updated        datetime         default '0000-00-00 00:00:00' not null,
+
+    title             varchar(255)     default '' not null,
+    image_url         varchar(1024)    default '' not null,
+
+    asin              char(10)         default null,
+    other_unique      varchar(255)     default null, 
+    primary key (product_id),
+    unique key (asin),
+    unique key (other_unique)
+) engine=innodb;
+
+drop table if exists product_varchar;
+create table product_varchar (
+    product_id        int unsigned     default 0 not null,
+    
+    dt_created        datetime         default '0000-00-00 00:00:00' not null,
+    active            enum('y', 'n')   default 'y' not null, 
+    dt_updated        datetime         default '0000-00-00 00:00:00' not null,
+
+    value             varchar(255)     default '' not null,
+    primary key (product_id,value)
+) engine=innodb;
