@@ -247,6 +247,9 @@ create table property (
     active          enum('y', 'n')   default 'y' not null, 
     dt_updated      datetime         default '0000-00-00 00:00:00' not null,
     property_name   varchar(255)     default '' not null,
+
+    type            enum('varchar','int') default 'varchar' not null,
+    is_array        enum('y', 'n')   default 'n' not null,
     primary key (property_id)           
 ) engine=innodb;
 
@@ -272,10 +275,31 @@ drop table if exists product_varchar;
 create table product_varchar (
     product_id        int unsigned     default 0 not null,
     
+    property_id       int unsigned     default 0 not null,
+
     dt_created        datetime         default '0000-00-00 00:00:00' not null,
     active            enum('y', 'n')   default 'y' not null, 
     dt_updated        datetime         default '0000-00-00 00:00:00' not null,
 
     value             varchar(255)     default '' not null,
-    primary key (product_id,value)
+
+    display_order     tinyint unsigned default 0  not null,
+    primary key (product_id,property_id,value)
 ) engine=innodb;
+
+drop table if exists product_int;
+create table product_int (
+    product_id        int unsigned     default 0 not null,
+    
+    property_id       int unsigned     default 0 not null,
+
+    dt_created        datetime         default '0000-00-00 00:00:00' not null,
+    active            enum('y', 'n')   default 'y' not null, 
+    dt_updated        datetime         default '0000-00-00 00:00:00' not null,
+
+    value             int unsigned     default 0 not null,
+
+    display_order     tinyint unsigned default 0 not null,
+    primary key (product_id,property_id,value)
+) engine=innodb;
+
