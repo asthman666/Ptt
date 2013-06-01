@@ -1,4 +1,4 @@
-package Ptt::Controller::Search;
+package Ptt::Controller::Compare;
 use Moose;
 use namespace::autoclean;
 
@@ -11,7 +11,7 @@ use Debug;
 use Date::Calc;
 use URI::Escape;
 
-sub search : Chained("/") : PathPart("search") : Args(0) {
+sub compare : Chained("/") : PathPart("compare") : Args(0) {
     my ( $self, $c ) = @_;
 
     my $q    = $c->req->params->{q};
@@ -46,31 +46,11 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     }
 
     my ( $total_results, $results );
-    if ( 1 ) {
-	if ( my $data = $c->model("API::AmazonSearch")->search($qh)->recv ) {
-	    use Data::Dumper;debug Dumper $data;
-
-	    my $items = $data->{Items}->{Item};
-	    foreach my $amazon_h ( @$items ) {
-		my $h;
-		$h->{asin} = $amazon_h->{ASIN};
-		$h->{image_url} = $amazon_h->{ImageSets}->{ImageSet}->{MediumImage}->{URL};
-		foreach my $key ( keys %{$amazon_h->{ItemAttributes}} ) {
-		    $h->{lc($key)} = $amazon_h->{ItemAttributes}->{$key};
-		}
-		push @$results, $h;
-	    }
-	    $total_results = $data->{Items}->{TotalResults};
-	}
-	$c->stash(template => 'amazon_search.tt');
-    } else {
-        my $data = $c->model("API::Search")->search($qh)->recv;
-        $total_results = $data->{response}->{numFound};
-        $results = $data->{response}->{docs};
-	$c->stash(template => 'search.tt');
+    if ( $qh->{ean} ) {
+        $results = $c->model('ImmediateSearch')->search($qh);
+        $total_results = @$results;
     }
 
-=for
     my @now = localtime;
     my ( $y2, $m2, $d2, $hh2, $mm2, $ss2 ) = ($now[5]+1900, $now[4]+1, $now[3], $now[2], $now[1], $now[0]);
 
@@ -121,7 +101,7 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     while ( my $site =  $rs->next ) {
 	$site_seen{$site->site_id} = $site->site_name;
     }
-=cut
+
 
     my $data_page = Data::Page->new($total_results, $c->config->{page_size}, $p);
     my $page = Page->new(data_page => $data_page);
@@ -130,8 +110,9 @@ sub search : Chained("/") : PathPart("search") : Args(0) {
     $c->stash(results => $results, 
 	      total_results => $total_results, 
 	      page => $page, 
-	      #site_seen => \%site_seen,
+	      site_seen => \%site_seen,
 	      qh => $qh,
+	      template => 'compare.tt'
         );
 }
 

@@ -10,6 +10,7 @@ use Try::Tiny 0.09;
 use AnyEvent::HTTP qw(http_request);
 use Debug;
 use namespace::autoclean;
+use XML::Simple;
 
 {
     no warnings 'once';
@@ -26,6 +27,9 @@ sub COMPONENT {
     my ( $app, $config ) = @_;
     $config = $self->merge_config_hashes(
         {   api  => $app->config->{api},
+	    aws_access_key => $app->config->{aws_access_key},
+	    aws_secret_key => $app->config->{aws_secret_key},
+	    aws_associate_tag => $app->config->{aws_associate_tag},
         },
         $config
     );
@@ -40,18 +44,24 @@ sub model {
 
 sub request {
     my ( $self, $path, $method ) = @_;
-    
     my $req = $self->cv;
+
     http_request $method ? $method
-        : 'get' => $self->api . $path,
+        : 'get' => $path,
         persistent => 0,
         sub {
             my ( $data, $headers ) = @_;
 	    if ( $headers->{Status} ne '200' ) {
 		debug("get Status $headers->{Status} for URL $headers->{URL}, Reason: $headers->{Reason}");
 	    }
-	    my $json = eval { decode_json($data) };
-	    $req->send( $@ ? $self->raw_api_response($data) : $json );
+	    
+	    if ( $data =~ m{^<\?xml} ) {
+		my $xml = eval{ XMLin($data, ForceArray => ['Item', 'Author', 'EAN']) };
+		$req->send( $@ ? $self->raw_api_response($data) : $xml );
+	    } else {
+		my $json = eval { decode_json($data) };
+		$req->send( $@ ? $self->raw_api_response($data) : $json );
+	    }
     };
 
     return $req;

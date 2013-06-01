@@ -59,7 +59,7 @@ sub search {
 	$path .= "&$k=" . uri_escape($assistant{$k});
     }
 
-    $self->request($path);
+    $self->request($self->{api} . $path);
 }
 
 sub q_escape {

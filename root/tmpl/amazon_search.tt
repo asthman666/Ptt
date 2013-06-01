@@ -1,0 +1,64 @@
+[% IF total_results %]
+<div class="row">
+    <span class="span12">
+    <ul class="nav nav-pills well well-small">
+    共 [% total_results %] 条
+    </ul>
+    </span>
+</div>
+
+<div class="row">
+    <span class="span12">
+    <ul class="nav nav-pills well well-small">
+        <li>
+        <form class="navbar-form">
+          价格范围: 
+          <input type="hidden" value="[% c.req.params.q %]" name="q">
+          <input type="text" class="ptt_span1" value="[% c.req.params.p1 %]" name="p1" id="p1"> - 
+          <input type="text" class="ptt_span1" value="[% c.req.params.p2 %]" name="p2" id="p2">  
+          <input type="submit" class="btn" value="走">
+        </form>
+        </li>
+    </ul>
+    </span>
+</div>
+[% END %]
+
+<table class="table table-hover" border=0>
+    <tbody>
+    [% FOREACH row IN results; %]
+       [% site_id = row.site_id %]
+
+        <tr>
+            <td width=6%><img src="[% row.image_url %]"></td>
+	    <td width=35%>
+                <p><a target=_blank href="/load?q=[% row.ean.0 %]">[% row.title %]</a></p>
+		[% IF row.author %]<p>作者: [% row.author.join(",") %]</p>[% END %]
+
+		[% IF row.publisher %]<p>出版社: [% row.publisher %]</p>[% END %]
+
+		[% pub = [] %]
+		[% IF row.publicationdate %][% pub.push(row.publicationdate) %][% END %]
+		[% IF row.edition %][% pub.push('(' _ row.edition _ ')') %][% END %]
+		[% IF pub.size %]<p>出版日期: [% pub.join("") %]</p>[% END %]
+
+		[% other = [] %]
+		[% IF row.binding %][% other.push(row.binding) %][% END %]
+		[% IF row.numberofpages %][% other.push(row.numberofpages _ '页') %][% END %]
+
+		[% IF other.size %][% other.join(" ") %][% END %]
+            </td>
+            <td width=15%>
+		<a class="btn btn-small pull-right" href="/load?q=[% row.ean.0 %]" target=_blank><i class="icon-hand-right"></i> 比比价</a>
+            </td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>
+
+[% IF page.data_page.first_page != page.data_page.last_page %]
+   [% INCLUDE page.tt %]
+[% END %]
+
+
+

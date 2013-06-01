@@ -22,7 +22,7 @@
 
 <div class="ptt_mb">  
   <span class="span7 ptt_mb" style="padding-left:260px;">
-    <form id="isearch" class="form-search ptt_mt" action="/search">  
+    <form id="isearch" class="form-search ptt_mt" action="/load">  
       <input type="text" class="input-xxlarge search-query" autocomplete="off" name="q" id="q">  
       <span id="cq"></span>
       <button type="submit" class="btn">Search</button>  

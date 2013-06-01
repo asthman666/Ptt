@@ -27,7 +27,7 @@
   </span>
 
   <span class="span7">
-    <form class="form-search ptt_mt" action="/search">  
+    <form class="form-search ptt_mt" action="/load">  
       <input type="text" class="input-xxlarge search-query" autocomplete="off" value="[% qh.k || c.req.params.q %]" name="q" id="q">  
       <button type="submit" class="btn">Search</button>  
     </form>  

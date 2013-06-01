@@ -1,0 +1,64 @@
+[% IF total_results %]
+<div class="row">
+    <span class="span12">
+    <ul class="nav nav-pills well well-small">
+    共 [% total_results %] 条
+    </ul>
+    </span>
+</div>
+[% END %]
+
+<table class="table table-hover">
+    <thead>
+    <tr><th>标题</th>
+	<th>[% IF qh.sort %]
+                [% IF qh.sort == 'price' %]
+        	    <a href=[% c.req.uri_with({ sort => '-price' }) %]>价格 <i class="icon-arrow-up"></i></a>
+    	        [% ELSIF qh.sort == '-price' %]
+    	            <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格 <i class="icon-arrow-down"></i></a>
+                [% ELSE %]
+                    <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格</a>
+    	        [% END %]
+            [% ELSE %]
+                <a href=[% c.req.uri_with({ sort => 'price' }) %]>价格</a>
+            [% END %]
+	</th>
+	<th>商家</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    [% index = 0 %]
+    [% FOREACH row IN results; %]
+       [% site_id = row.site_id %]
+        <tr>
+	    <td width=40%>
+                <a target=_blank href="[% row.url %]">[% row.title %]</a>
+            </td>
+            <td width=10%>
+		    [% IF row.price && row.price != '0.00' %]
+       		       ￥<span class="price">[% row.price %]</span>
+		    [% END %]
+		    [% IF row.available == 'out of stock' %]
+			(缺货)
+		    [% ELSIF row.available == 'pre order' %]
+			(可预订)
+		    [% END %]
+            </td>
+            <td width=7%>
+	        [% site_seen.$site_id %]
+            </td>
+            <td width=15%>
+		<a class="btn btn-small pull-right" href="[% row.url %]" target=_blank><i class="icon-hand-right"></i> 购买</a>
+            </td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>
+
+[% IF page.data_page.first_page != page.data_page.last_page %]
+   [% INCLUDE page.tt %]
+[% END %]
+
+
+
