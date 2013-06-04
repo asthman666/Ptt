@@ -4,23 +4,11 @@ extends 'Catalyst::Model';
 use Data::Dumper;
 use Debug;
 use Coro;
-use AnyEvent::HTTP;
-use HTTP::Headers;
-use HTTP::Message;
 use HTML::TreeBuilder;
 use Crawler::StoreLoader;
+use LWP::UserAgent;
 
 has 'store_loader' => (is => 'rw', lazy_build => 1);
-
-has 'headers' => (is => 'ro', isa => 'HashRef', 
-		  default => sub { 
-		      {
-			  "user-agent" => "Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0",
-			  "Accept-Encoding" => "gzip, deflate",
-			  'Accept-Language' => "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3",
-			  'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-		      } 
-		  });
 
 sub _build_store_loader {
     my $self = shift;
@@ -60,25 +48,44 @@ sub search {
             async {
                 my $guard = $sem->guard;
 
-                http_get $url,
-                headers => $self->headers,
-                Coro::rouse_cb;
+		my $lwp = LWP::UserAgent->new();
+		$lwp->agent('Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0');
+		$lwp->default_header("Accept-Encoding" => "gzip, deflate");
+		$lwp->default_header('Accept-Language' => "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+		$lwp->default_header('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
 
-                my ($body, $hdr) = Coro::rouse_wait;
-                #debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
-		debug Dumper $hdr;
+		my $resp = $lwp->get($url);
 
-                my $header = HTTP::Headers->new('content-encoding' => $hdr->{'content-encoding'}, 'content-type' => 'text/html');
-                #my $header = HTTP::Headers->new('content-type' => 'text/html');
-                my $mess = HTTP::Message->new( $header, $body );
-		
 		my $content;
 		if ( my $charset = $site_id2charset{$site_id} ) {
-		    $content = $mess->decoded_content(charset => $charset);
+		    $content = $resp->decoded_content(charset => $charset);
 		} else {
-		    $content = $mess->decoded_content();
+		    $content = $resp->decoded_content();
 		}
 
+		debug("$url, " . $resp->status_line);
+
+		#debug $content;
+
+                #http_get $url,
+                #headers => $self->headers,
+                #Coro::rouse_cb;
+
+                #my ($body, $hdr) = Coro::rouse_wait;
+                #debug("$hdr->{Status} $hdr->{Reason} $hdr->{URL}");
+		#debug Dumper $hdr;
+
+                #my $header = HTTP::Headers->new('content-encoding' => $hdr->{'content-encoding'}, 'content-type' => 'text/html');
+                #my $header = HTTP::Headers->new('content-type' => 'text/html');
+                #my $mess = HTTP::Message->new( $header, $body );
+		
+		#my $content;
+		#if ( my $charset = $site_id2charset{$site_id} ) {
+		#    $content = $mess->decoded_content(charset => $charset);
+		#} else {
+		#    $content = $mess->decoded_content();
+		#}
+		
                 my $object = $self->store_loader->get_object($site_id);
                 $object->parse($url, $content);
 
